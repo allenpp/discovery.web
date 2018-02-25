@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p - %C[%L] - [%t] - %m \n" />
+		</layout>
+	</appender>
+
+	<appender name="INFO" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="Append" value="true" />
+		<param name="file" value="${catalina.base}/logs/system_info_${log4jfile}.log" />
+		<param name="BufferedIO" value="true" />
+		<!-- 8K为一个写单元 -->
+		<param name="BufferSize" value="32768" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p - %C[%L] - [%t] - %m \n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="INFO" />
+			<param name="LevelMax" value="INFO" />
+		</filter>
+	</appender>
+
+	<appender name="ERROR" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="Append" value="true" />
+		<param name="file" value="${catalina.base}/logs/system_error_${log4jfile}.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p - %C[%L] - [%t] - %m \n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+	<logger name="com.jd.jr.user.dbrouter.router" level="ERROR" additivity="false">
+		<appender-ref ref="ERROR" />
+	</logger>
+
+	<root>
+		<priority value="debug" />
+		<appender-ref ref="INFO" />
+		<appender-ref ref="ERROR" />
+	    <appender-ref ref="CONSOLE" />
+	</root>
+
+</log4j:configuration>

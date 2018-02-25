@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.discovery.mapper.WaveMapper">
+
+
+    <insert id="insert"  parameterType="com.neo.discovery.vo.Wave">
+
+        insert into wave(
+        matchId,
+
+        buy_s1,
+        buy_p1,
+        buy_f1,
+        buy_s1_amount,
+        buy_p1_amount,
+        buy_f1_amount,
+
+         buy_s2,
+        buy_p2,
+        buy_f2,
+        buy_s2_amount,
+        buy_p2_amount,
+        buy_f2_amount,
+
+         buy_s3,
+        buy_p3,
+        buy_f3,
+        buy_s3_amount,
+        buy_p3_amount,
+        buy_f3_amount,
+
+        sale_s1,
+        sale_p1,
+        sale_f1,
+        sale_s1_amount,
+        sale_p1_amount,
+        sale_f1_amount,
+
+
+        sale_s2,
+        sale_p2,
+        sale_f2,
+        sale_s2_amount,
+        sale_p2_amount,
+        sale_f2_amount,
+
+        sale_s3,
+        sale_p3,
+        sale_f3,
+        sale_s3_amount,
+        sale_p3_amount,
+        sale_f3_amount,
+
+
+        createTime,
+        matchDate,
+        home,
+        away,
+        leagueName,
+        json )
+        values (
+
+
+          #{ matchId},
+        #{buy_s1},
+         #{buy_p1},
+         #{buy_f1},
+          #{buy_s1_amount},
+          #{buy_p1_amount},
+         #{buy_f1_amount},
+
+
+        #{buy_s2},
+         #{buy_p2},
+         #{buy_f2},
+          #{buy_s2_amount},
+          #{buy_p2_amount},
+         #{buy_f2_amount},
+
+        #{buy_s3},
+         #{buy_p3},
+         #{buy_f3},
+          #{buy_s3_amount},
+          #{buy_p3_amount},
+         #{buy_f3_amount},
+
+
+         #{sale_s1},
+          #{sale_p1},
+          #{sale_f1},
+          #{sale_s1_amount},
+          #{sale_p1_amount},
+          #{sale_f1_amount},
+
+         #{sale_s2},
+          #{sale_p2},
+          #{sale_f2},
+          #{sale_s2_amount},
+          #{sale_p2_amount},
+          #{sale_f2_amount},
+
+         #{sale_s3},
+          #{sale_p3},
+          #{sale_f3},
+          #{sale_s3_amount},
+          #{sale_p3_amount},
+          #{sale_f3_amount},
+
+
+         #{createTime},
+        #{matchDate},
+         #{home},
+         #{away},
+          #{leagueName},
+         #{json}
+
+        );
+
+    </insert>
+
+
+
+    <select id="selectWaveList"  parameterType = "com.neo.discovery.vo.Wave" resultType="com.neo.discovery.vo.Wave">
+
+        select * from wave where  1=1
+        <if test="matchId != null ">
+            and matchId =#{matchId}
+        </if>
+
+        <if test="beginTime != null ">
+            and createTime >#{beginTime}
+        </if>
+        <if test="endTime != null ">
+            and  #{endTime} >createTime
+        </if>
+
+        limit 10000
+
+    </select>
+
+
+</mapper>

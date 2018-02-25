@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.discovery.mapper.QueryRaceTeamMapper">
+    <resultMap id="queryRaceTeamMapper" type="com.neo.discovery.vo.RaceTeam" >
+        <result column="raceDatee" property="raceDate" jdbcType="DATE"/>
+    </resultMap>
+
+
+
+    <select id="selectBiFen"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="java.lang.Integer">
+
+        select count(1) from race_detail where  raceDate>='2017-01-01'   and #{daEq}>=equals and equals>=#{xiEq}  and fail>=#{xiFail} and #{daFail}>=fail
+         and ( (fullHomeTeamCourtscore+ fullVisitingTeamCourtscore=2 ))
+        <!--select count(1) from race_detail where  raceDate>='2017-09-01' and  rangWin>=#{xiWin}  and #{daWin} >=rangWin   and #{daEq}>=rangEq and rangEq>=#{xiEq}  and rangFail>=#{xiFail} and #{daFail}>=rangFail-->
+        <!--and baoleng is not null-->
+    </select>
+    <select id="selectCount"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="java.lang.Integer">
+        select count(1) from race_detail where raceDate>='2017-01-01'  and   #{daEq}>=equals and equals>=#{xiEq}  and fail>=#{xiFail} and #{daFail}>=fail
+
+
+        <!--select count(1) from race_detail where raceDate>='2017-01-01' and-->
+        <!--rangWin>=#{xiWin}  and #{daWin} >=rangWin   and #{daEq}>=rangEq and rangEq>=#{xiEq}  and rangFail>=#{xiFail} and #{daFail}>=rangFail-->
+
+    </select>
+    <select id="selectCountDaYu6"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="com.neo.discovery.vo.RaceTeam">
+        select raceDate  from race_detail where  fail>4 and equals>3.5 and rangFail>2.5 and 0>rangscore
+
+        and  fullHomeTeamCourtscore is not null  and  fullVisitingTeamCourtScore is not null
+        and  raceDate >'2016-09-01'  group by  raceDate  having count(1)>=6
+
+        <!--select count(1) from race_detail where raceDate>='2017-01-01' and-->
+        <!--rangWin>=#{xiWin}  and #{daWin} >=rangWin   and #{daEq}>=rangEq and rangEq>=#{xiEq}  and rangFail>=#{xiFail} and #{daFail}>=rangFail-->
+
+    </select>
+    <select id="selectRaceTeamByRandomRateCount"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="com.neo.discovery.vo.RaceTeam">
+        select raceDate from race_detail where
+
+          0>rangscore
+        and  fullHomeTeamCourtscore is not null  and  fullVisitingTeamCourtScore is not null
+
+        <if test="xiWin != null"> and  win>#{xiWin}   </if>
+        <if test="daWin != null"> and   <![CDATA[ win<#{daWin} ]]>  </if>
+
+        <if test="xiEq != null"> and  equals>#{xiEq}   </if>
+        <if test="daEq != null"> and   <![CDATA[ equals<#{daEq} ]]>  </if>
+
+        <if test="xiFail != null"> and  fail>#{xiFail}   </if>
+        <if test="daFail != null"> and   <![CDATA[ fail<#{daFail} ]]>  </if>
+
+
+        <if test="rangXiWin != null"> and  rangWin>#{rangXiWin}   </if>
+        <if test="rangDaWin != null"> and   <![CDATA[ rangWin<#{rangDaWin} ]]>  </if>
+
+        <if test="rangXiEq != null"> and  rangEq>#{rangXiEq}   </if>
+        <if test="rangDaEq != null"> and   <![CDATA[ rangEq<#{rangDaEq} ]]>  </if>
+
+        <if test="rangXiFail != null"> and  rangFail>#{rangXiFail}   </if>
+        <if test="rangDaFail != null"> and   <![CDATA[ rangFail<#{rangDaFail} ]]>  </if>
+
+
+        and  raceDate >'2016-06-01'  group by  raceDate  having count(1)>=6
+
+
+    </select>
+    <select id="selectRaceTeamByRandomRate"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="com.neo.discovery.vo.RaceTeam">
+        select * from race_detail where
+
+          0>rangscore
+        and  fullHomeTeamCourtscore is not null  and  fullVisitingTeamCourtScore is not null
+
+        <if test="xiWin != null"> and  win>#{xiWin}   </if>
+        <if test="daWin != null"> and   <![CDATA[ win<#{daWin} ]]>  </if>
+
+        <if test="xiEq != null"> and  equals>#{xiEq}   </if>
+        <if test="daEq != null"> and   <![CDATA[ equals<#{daEq} ]]>  </if>
+
+        <if test="xiFail != null"> and  fail>#{xiFail}   </if>
+        <if test="daFail != null"> and   <![CDATA[ fail<#{daFail} ]]>  </if>
+
+
+        <if test="rangXiWin != null"> and  rangWin>#{rangXiWin}   </if>
+        <if test="rangDaWin != null"> and   <![CDATA[ rangWin<#{rangDaWin} ]]>  </if>
+
+        <if test="rangXiEq != null"> and  rangEq>#{rangXiEq}   </if>
+        <if test="rangDaEq != null"> and   <![CDATA[ rangEq<#{rangDaEq} ]]>  </if>
+
+        <if test="rangXiFail != null"> and  rangFail>#{rangXiFail}   </if>
+        <if test="rangDaFail != null"> and   <![CDATA[ rangFail<#{rangDaFail} ]]>  </if>
+
+
+        <if test="raceDates!=null">
+            <foreach collection="raceDates" item="raceDate" open="AND raceDate IN (" close=")" separator=",">
+                #{raceDate}
+            </foreach>
+        </if>
+
+        order  by raceNo asc
+
+    </select>
+
+
+
+</mapper>

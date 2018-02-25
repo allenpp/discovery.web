@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.discovery.mapper.RaceDataMapper">
+    <resultMap id="raceTeamMapper" type="com.neo.discovery.vo.RaceData" >
+        <result column="raceDate" property="raceDate" jdbcType="DATE"/>
+    </resultMap>
+
+    <insert id="insert"  parameterType="com.neo.discovery.vo.RaceData">
+
+        insert into raceData(id,matchId,pool_result , getMatchInfo ,getTeamScore  , getTeamRecData , getFutureMatches , getResultHis , getTeamStatistics
+          )
+        values ( #{id},#{matchId},#{pool_result},#{getMatchInfo},#{getTeamScore},#{getTeamRecData},#{getFutureMatches},#{getResultHis},#{getTeamStatistics});
+
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.discovery.mapper.RaceTeamMapper">
+    <resultMap id="raceTeamMapper" type="com.neo.discovery.vo.RaceTeam" >
+        <result column="raceDatee" property="raceDate" jdbcType="DATE"/>
+    </resultMap>
+
+    <insert id="insert"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        insert into race_detail(id,raceDate,raceNo , leagueName ,homeTeam  , visitingTeam , halfCourtScore , fullHomeTeamCourtscore , fullVisitingTeamCourtscore , raceStatus ,  resultUrl ,win,equals,fail,
+        rangScore  , rangWin ,  rangEq , rangFail,halfHomeScore,halfVisitingScore,result,zongwin,zongeq,zongfail,zhuwin,zhueq,zhufail,kewin,keeq,kefail )
+        values ( #{id},#{raceDate},#{raceNo},#{leagueName},#{homeTeam},#{visitingTeam},#{halfCourtScore},#{fullHomeTeamCourtscore},#{fullVisitingTeamCourtscore},#{raceStatus} ,#{resultUrl},#{win},#{equals},#{fail} ,#{rangScore} , #{rangWin}  , #{rangEq}   ,#{rangFail} ,#{halfHomeScore},#{halfVisitingScore},#{result}
+        ,#{zongWin},#{zongEq},#{zongFail},#{zhuWin},#{zhuEq},#{zhuFail},#{keWin},#{keEq},#{keFail});
+
+    </insert>
+    <insert id="insertJdd"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        insert into race_detail_jdd (id,raceDate,raceNo , leagueName ,homeTeam  , visitingTeam , halfCourtScore , fullHomeTeamCourtscore , fullVisitingTeamCourtscore , raceStatus ,  resultUrl ,win,equals,fail,
+        rangScore  , rangWin ,  rangEq , rangFail,halfHomeScore,halfVisitingScore,result,matchId,winRate  ,eqRate ,failRate ,   mid,jingCaiDate )
+        values ( #{id},#{raceDate},#{raceNo},#{leagueName},#{homeTeam},#{visitingTeam},#{halfCourtScore},#{fullHomeTeamCourtscore},#{fullVisitingTeamCourtscore},#{raceStatus} ,#{resultUrl},#{win},#{equals},#{fail} ,#{rangScore} , #{rangWin}  , #{rangEq}   ,#{rangFail} ,#{halfHomeScore},#{halfVisitingScore},#{result}
+        ,#{matchId},#{winRate},#{eqRate},#{failRate},#{mid},#{jingCaiDate});
+
+    </insert>
+
+
+    <select id="selectRaceTeam"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="com.neo.discovery.vo.RaceTeam">
+
+         select * from race_detail where  raceDate=DATE_FORMAT(#{raceDate},'%Y-%m-%d')
+        <if test="raceNo != null ">
+                 and raceNo =#{raceNo}
+        </if>
+                 and homeTeam = #{homeTeam} and visitingTeam =#{visitingTeam}
+
+    </select>
+    <select id="selectRaceTeamList"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="com.neo.discovery.vo.RaceTeam">
+
+         select * from race_detail where ( raceStatus !='取消'   and     win0 =0
+             and equals0 =0 and fail0=0 )  limit 0,100
+
+    </select>
+    <select id="selectRaceTeamCount"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="java.lang.Integer">
+
+         select count(1) from race_detail where (     resultUrl is not null  and     win is not null   and  zongwin is null  and zhuwin is null  and kewin is null     )
+
+    </select>
+    <select id="selectRaceTeamListByPage"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="com.neo.discovery.vo.RaceTeam">
+
+         select * from race_detail where     resultUrl is not null  and     win is not null   order by raceDate desc
+                 limit #{begin},#{end}
+
+    </select>
+    <select id="selectCountDaYu6"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="com.neo.discovery.vo.RaceTeam">
+        select raceDate  from race_detail where     ( win>1.6  and rangfail>1.6  )   and rangscore=-1
+
+
+        and  fullHomeTeamCourtscore is not null  and  fullVisitingTeamCourtScore is not null
+              group by  raceDate  having count(1)>=10
+
+
+
+        order by raceDate desc
+
+        <!--select count(1) from race_detail where raceDate>='2017-01-01' and-->
+        <!--rangWin>=#{xiWin}  and #{daWin} >=rangWin   and #{daEq}>=rangEq and rangEq>=#{xiEq}  and rangFail>=#{xiFail} and #{daFail}>=rangFail-->
+
+    </select>
+
+
+    <select id="selectBaoLeng"  parameterType = "com.neo.discovery.vo.RaceTeam" resultType="com.neo.discovery.vo.RaceTeam">
+
+
+        <!--select * from race_detail  where raceDate =str_to_date(#{raceDate},'%Y-%m-%d ')     and  fail>=4   and win>1.4  limit 7-->
+
+
+        select *  from race_detail where   ( win>1.6  and rangfail>1.6  )    and rangscore=-1
+
+        and  fullHomeTeamCourtscore is not null  and  fullVisitingTeamCourtScore  is not null
+
+        <if test="raceDates!=null  and raceDates.size >0">
+            <!--
+             使用foreach遍历传入的ids
+             collection:指定输入对象中的集合属性
+             item:每个便利的对象
+             open:开始遍历拼接的串
+             close:结束遍历拼接的串
+             separator:遍历的两个对象中需要拼接的串
+             -->
+            <foreach collection="raceDates" item="raceDate" open="AND raceDate IN (" close=")" separator=",">
+                #{raceDate}
+            </foreach>
+        </if>  order by raceDate desc,raceNo asc
+        <!-- binggo   select *  from race_detail where raceDate =str_to_date(#{raceDate},'%Y-%m-%d ')  and fail>4 and equals>3.5 and rangFail>2.5 and 0>rangscore  limit 6-->
+        <!--select *  from race_detail where raceDate =str_to_date(#{raceDate},'%Y-%m-%d ')   and   equals>3  and win>2 and 0>rangscore     limit  6-->
+
+        <!--select *  from race_detail where raceDate =str_to_date(#{raceDate},'%Y-%m-%d ')   and    fail>4  and  equals>3.5   and rangfail>=2   order by fail desc   limit  6-->
+
+        <!--  select * from race_detail  where raceDate ='2017-09-01'     and  win>1.5 and   fail>4  and  rangWin>rangFail
+          and (( win+equals+fail >=8) and 11>= (   win+equals+fail))   -->
+
+
+
+        <!--  select * from race_detail  where raceDate ='2017-09-10'  and  win>1.4 and  fail>4  and  rangWin>rangFail    order by raceDate desc  -->
+
+        <!-- where     raceDate =str_to_date(#{raceDate},'%Y-%m-%d ')    and  ( win!=0 and equals!=0 and fail!=0 )   order by raceDate  limit 0,40   -->
+    </select>
+
+    <update id="updateRaceTeamByJdd"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        UPDATE  race_detail set winRate = #{winRate} ,eqRate = #{eqRate},failRate = #{failRate},   mid = #{mid},  matchId = #{matchId}
+         where id = #{id} and raceDate=DATE_FORMAT(#{raceDate},'%Y-%m-%d')
+        <if test="raceNo != null ">
+            and raceNo =#{raceNo}
+        </if>
+        and homeTeam = #{homeTeam} and visitingTeam =#{visitingTeam}
+    </update>
+    <update id="updateRaceTeamHisResult"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        UPDATE  race_detail set zongWin = #{zongWin} ,zongEq = #{zongEq},zongFail = #{zongFail},
+        zhuWin = #{zhuWin} ,zhuEq = #{zhuEq},zhuFail = #{zhuFail},
+        keWin = #{keWin} ,keEq = #{keEq},keFail = #{keFail}
+
+         where id = #{id}
+    </update>
+    <update id="updateRaceTeam"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        UPDATE  race_detail set win = #{win},equals = #{equals},  fail = #{fail},rangScore = #{rangScore} ,rangWin = #{rangWin},rangEq = #{rangEq},  rangFail = #{rangFail}
+         where id = #{id}  and rangScore is null  and  rangWin is null  and  rangEq is null   and  rangFail is null
+    </update>
+    <update id="updateRaceTeamPoolResult"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        UPDATE  race_detail set pool_result = #{pool_result}
+         where matchId = #{matchId}   and  pool_result is null
+    </update>
+    <update id="updateRaceTeamBifen"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        UPDATE  race_detail set  fullHomeTeamCourtscore=#{fullHomeTeamCourtscore},fullVisitingTeamCourtScore = #{fullVisitingTeamCourtScore}
+         where id = #{id}  and  fullHomeTeamCourtscore is null  and  fullVisitingTeamCourtScore is null
+    </update>
+    <update id="updateRaceTeamFirst"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        UPDATE  race_detail set winmin = #{winmin} ,eqmin = #{eqmin},failmin = #{failmin},
+                w10 = #{w10},  w20 = #{w20},  w21 = #{w21},  w30 = #{w30},  w31 = #{w31},
+                e00 = #{e00},  e11 = #{e11},  e22 = #{e22},  e33 = #{e33}  ,
+                f01 = #{f01},  f02 = #{f02},  f12 = #{f12},  f03 = #{f03},  f13 = #{f13}
+         where id = #{id}
+        <!--UPDATE  race_detail set win0 = #{win0} ,equals0 = #{equals0},fail0 = #{fail0},  rangWin0 = #{rangWin0},  rangEq0 = #{rangEq0},  rangFail0 = #{rangFail0}-->
+         <!--where id = #{id}  and win0 =0-->
+    </update>
+    <update id="updateRaceTeamZongHf"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        UPDATE  race_detail set pool_result = #{pool_result} ,zong0 = #{zong0},zong1 = #{zong1},
+        zong2 = #{zong2},  zong3 = #{zong3},  zong4 = #{zong4},  zong5 = #{zong5},  zong6 = #{zong6},
+        zong7 = #{zong7},  hfss = #{hfss},  hfps = #{hfps},  hffs = #{hffs}  ,
+        hfsp = #{hfsp},  hfpp = #{hfpp},  hffp = #{hffp},  hfff = #{hfff},  hfpf = #{hfpf}, hfsf = #{hfsf},zongmin=#{zongmin},hfmin=#{hfmin}
+         where id = #{id}
+        <!--UPDATE  race_detail set win0 = #{win0} ,equals0 = #{equals0},fail0 = #{fail0},  rangWin0 = #{rangWin0},  rangEq0 = #{rangEq0},  rangFail0 = #{rangFail0}-->
+         <!--where id = #{id}  and win0 =0-->
+    </update>
+    <update id="updateRaceTeamAllField"  parameterType="com.neo.discovery.vo.RaceTeam">
+
+        UPDATE  race_detail set
+        pool_result = #{pool_result} ,
+     <!--   zong0 = #{zong0},zong1 = #{zong1},
+        zong2 = #{zong2},  zong3 = #{zong3},  zong4 = #{zong4},  zong5 = #{zong5},  zong6 = #{zong6},
+        zong7 = #{zong7},  hfss = #{hfss},  hfps = #{hfps},  hffs = #{hffs}  ,
+        hfsp = #{hfsp},  hfpp = #{hfpp},  hffp = #{hffp},  hfff = #{hfff},  hfpf = #{hfpf}, hfsf = #{hfsf},zongmin=#{zongmin},hfmin=#{hfmin},  -->
+
+        winmin = #{winmin} ,eqmin = #{eqmin},failmin = #{failmin},
+        w10 = #{w10},  w20 = #{w20},  w21 = #{w21},  w30 = #{w30},  w31 = #{w31},
+        e00 = #{e00},  e11 = #{e11},  e22 = #{e22},  e33 = #{e33}  ,
+        f01 = #{f01},  f02 = #{f02},  f12 = #{f12},  f03 = #{f03},  f13 = #{f13},
+
+        rangScore = #{rangScore} ,rangWin = #{rangWin},rangEq = #{rangEq},  rangFail = #{rangFail},
+
+        win = #{win},equals = #{equals},  fail = #{fail},
+
+        win0 = #{win0} ,equals0 = #{equals0},fail0 = #{fail0},  rangWin0 = #{rangWin0},  rangEq0 = #{rangEq0},  rangFail0 = #{rangFail0}
+
+        ,zongWin = #{zongWin} ,zongEq = #{zongEq},zongFail = #{zongFail},
+        zhuWin = #{zhuWin} ,zhuEq = #{zhuEq},zhuFail = #{zhuFail},
+        keWin = #{keWin} ,keEq = #{keEq},keFail = #{keFail}
+         where id = #{id}
+        <!--UPDATE  race_detail set win0 = #{win0} ,equals0 = #{equals0},fail0 = #{fail0},  rangWin0 = #{rangWin0},  rangEq0 = #{rangEq0},  rangFail0 = #{rangFail0}-->
+         <!--where id = #{id}  and win0 =0-->
+    </update>
+
+
+
+    <insert id="insertBiFa"  parameterType="com.neo.discovery.vo.BiFaDTo">
+
+        insert into BiFa(
+           id,
+         marchId,
+         totalAmount,
+         winAmount,
+         drawAmount,
+         lossAmount,
+         winPercent,
+         drawPercent,
+         lossPercent,
+         owin,
+         oeq,
+         ofail,
+         owin_bankerProfit,
+         oeq_bankerProfit,
+         ofail_bankerProfit,
+         benzhan_win,
+         benzhan_eq,
+         benzhan_fail
+         )
+        values (
+               #{id},
+       #{marchId},
+       #{totalAmount},
+       #{winAmount},
+       #{drawAmount},
+       #{lossAmount},
+       #{winPercent},
+       #{drawPercent},
+       #{lossPercent},
+       #{owin},
+       #{oeq},
+       #{ofail},
+       #{owin_bankerProfit},
+       #{oeq_bankerProfit},
+       #{ofail_bankerProfit},
+       #{benzhan_win},
+       #{benzhan_eq},
+       #{benzhan_fail}
+        );
+
+    </insert>
+
+    <insert id="insertPeiLvChange"  parameterType="com.neo.discovery.vo.PeiLvDTo">
+
+        insert into jdd_peilv_change(
+         id,
+         matchId,
+         win,
+         draw,
+         loss,
+         changeWin,
+         changeDraw,
+         changeLoss,
+         firstOrLastOdds,
+         updateTime,
+         rangWin,
+         rangEq,
+         rangFail
+        )
+        values (
+
+       #{id},
+       #{matchId},
+       #{win},
+       #{draw},
+       #{loss},
+       #{changeWin},
+       #{changeDraw},
+       #{changeLoss},
+       #{firstOrLastOdds},
+       #{updateTime},
+       #{rangWin},
+       #{rangEq},
+       #{rangFail}
+        );
+
+    </insert>
+
+</mapper>

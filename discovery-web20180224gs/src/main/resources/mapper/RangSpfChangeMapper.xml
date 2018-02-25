@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.discovery.mapper.RangSpfChangeMapper">
+    <resultMap id="raceTeamMapper" type="com.neo.discovery.vo.RaceTeam" >
+        <result column="raceDatee" property="raceDate" jdbcType="DATE"/>
+    </resultMap>
+
+    <insert id="insert"  parameterType="com.neo.discovery.vo.RangSpfChange">
+
+        insert into rangSpfChange(id,matchId , rangwin , rangequals , rangfail ,publishtime  ,  rangwinfx , rangequalsfx  ,rangfailfx  ,rangscore,createTime )
+        values ( #{id},#{matchId},#{rangwin},#{rangequals},#{rangfail},#{publishtime},#{rangwinfx},#{rangequalsfx},#{rangfailfx},#{rangscore},#{createTime});
+
+    </insert>
+
+    <select id="selectRangSpfChange"  parameterType = "com.neo.discovery.vo.RangSpfChange" resultType="com.neo.discovery.vo.RangSpfChange">
+
+         select * from rangSpfChange where 1=1
+        <if test="publishtime != null ">
+            raceDate=DATE_FORMAT(#{raceDate},'%Y-%m-%d')
+        </if>
+        <if test="matchId != null ">
+                 and matchId =#{matchId}
+        </if>
+
+    </select>
+    <select id="selectRangSpfChangeList"  parameterType = "com.neo.discovery.vo.RangSpfChange" resultType="com.neo.discovery.vo.RangSpfChange">
+
+         select * from rangSpfChange where   1=1
+        <if test="publishtime != null ">
+        raceDate=DATE_FORMAT(#{raceDate},'%Y-%m-%d')
+        </if>
+        <if test="matchId != null ">
+            and matchId =#{matchId}
+        </if>
+
+    </select>
+
+    <update id="updateRaceTeamAllField"  parameterType="com.neo.discovery.vo.RangSpfChange">
+
+        UPDATE  rangSpfChange set
+        pool_result = #{pool_result} ,
+
+        winmin = #{winmin} ,eqmin = #{eqmin},failmin = #{failmin},
+        w10 = #{w10},  w20 = #{w20},  w21 = #{w21},  w30 = #{w30},  w31 = #{w31},
+        e00 = #{e00},  e11 = #{e11},  e22 = #{e22},  e33 = #{e33}  ,
+        f01 = #{f01},  f02 = #{f02},  f12 = #{f12},  f03 = #{f03},  f13 = #{f13},
+
+        rangScore = #{rangScore} ,rangWin = #{rangWin},rangEq = #{rangEq},  rangFail = #{rangFail},
+
+        win = #{win},equals = #{equals},  fail = #{fail},
+
+        win0 = #{win0} ,equals0 = #{equals0},fail0 = #{fail0},  rangWin0 = #{rangWin0},  rangEq0 = #{rangEq0},  rangFail0 = #{rangFail0}
+
+        ,zongWin = #{zongWin} ,zongEq = #{zongEq},zongFail = #{zongFail},
+        zhuWin = #{zhuWin} ,zhuEq = #{zhuEq},zhuFail = #{zhuFail},
+        keWin = #{keWin} ,keEq = #{keEq},keFail = #{keFail}
+         where id = #{id}
+    </update>
+
+
+
+</mapper>

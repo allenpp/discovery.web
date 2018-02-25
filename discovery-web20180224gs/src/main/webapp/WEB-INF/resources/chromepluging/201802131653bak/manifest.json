@@ -1,0 +1,17 @@
+{
+  "name": "Flutter",
+  "manifest_version": 2,
+  "version": "1.0",
+  "description": "I Love Flutter ",
+  "permissions": [  
+        "*://*/*",
+		"activeTab",
+		"tabs"
+    ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.fun173.com/zh-cn/exchange/main.htm*"],
+      "js": ["jquery-3.2.1.min.js","script.js"]
+    }
+  ]
+}

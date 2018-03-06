@@ -172,7 +172,7 @@ public class HttpClientUtils {
         }
         return result;
     }
-    public static  String doHttpsPostWithCookie(String url,Map<String,String> map,String charset,String cookies){
+    public static  String doHttpsPostWithCookie(String url,Map<String,String> map,String charset,String cookies,StringEntity stringEntity){
         CookieStore cookieStore = new BasicCookieStore();
         HttpClient httpClient = null;
         HttpPost httpPost = null;
@@ -202,6 +202,8 @@ public class HttpClientUtils {
 //            se.setContentType("application/json;charset=UTF-8");
 
 //            httpPost.setEntity(se);
+
+            httpPost.setEntity(stringEntity);
             HttpResponse response = httpClient.execute(httpPost);
             if(response != null){
                 HttpEntity resEntity = response.getEntity();
@@ -328,7 +330,7 @@ public class HttpClientUtils {
 //        String tail = "node_platform/?d=ball&c=ball&m=loadMatchById&ajax=true&cms_where=1367&vb2ctag=4_2061_3_1866&bc_web=1018451640&reportUin=085e9858e60c0f50ce94f4aed%40wx.tenpay.com&_=359924954371";
 //        String cookies = "vb2ctag=104_205; vb2ctag2=104_205; 1940794343=html; bc_web=16976632c08; wcp_uid=1317176614; wcp_qlskey=wx3749d0c504fe6d16_09a37b522f4be6a16b7a996322d060b2; wcp_qluin=085e9858e60c0f50ce94f4aed@wx.tenpay.com; wcp_qlappid=wx3749d0c504fe6d16; wcp_qq_logtype=16; openid=oTTG3jiDFUKE8iNbZbXXNsY8Ef7M; wcp_nickname=%25E7%25A2%25B0%25E7%25A2%25B0; wcp_pictureUrl=http%3A//wx.qlogo.cn/mmopen/bNqVZcia7iaByzWCSdZhfr5Pxp561xoDStib2qjz804bqvicY81lOgSLks80oCrFCezobQ0wtaicZialNVep5Lt88Xibw/132; qlskey=wx3749d0c504fe6d16_09a37b522f4be6a16b7a996322d060b2; qluin=085e9858e60c0f50ce94f4aed@wx.tenpay.com; qlappid=wx3749d0c504fe6d16; qq_logtype=16; is_encode=1; wcp_newlogin=1; access_token=6_aQpxOqZlN0zfRv-0qkdQJs2axv3BoCVvBzFErwglpYKg7silAOgRWna7KV7tbqMbAATU9cRyxM5q0CMHt5RfAQ; wcp_rcode=1517404505796; ts_last=/m_wx/index.html; pgv_pvid=8721643510; pgv_info=ssid=s5304437022; ts_uid=6858575136; ts_sid=9201961840; pgv_pvid_new=085e9858e60c0f50ce94f4aed@wx.tenpay.com_b853e5011f; 1876809700=html";
         url = url+tail;
-        return doHttpsPostWithCookie(url,null,"utf-8",cookies);
+        return doHttpsPostWithCookie(url,null,"utf-8",cookies,null);
     }
 
 
@@ -351,7 +353,7 @@ public class HttpClientUtils {
 
 
         String cookies = "CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; intro_BeforeLogin=1; _ga=GA1.1.1786535346.1518144744; _gid=GA1.1.1338613481.1518144744; ASP.NET_SessionId=t1pzbxid0hsb3l4cvxntaacf; _pk_ses.4.37b9=*; comm100_guid2_100014005=vaekRBU5cUSVU-r73OI9QA; BIAB_LANGUAGE=zh_CN; i18next=zh_CN; BIAB_TZ=-480; BIAB_SHOW_TOOLTIPS=false; _pk_id.4.37b9=69ad0a1b95b2157c.1518144744.2.1518171261.1518170979.; CSRF-TOKEN=cea8f7a7d8f83a90b3b3409c9c1fae6f15";
-        return doHttpsPostWithCookie(url, null, "utf-8", cookies);
+        return doHttpsPostWithCookie(url, null, "utf-8", cookies,null);
 
     }
     public static String fun88HttpsGet(){
@@ -370,12 +372,45 @@ public class HttpClientUtils {
 //        return httpGet(url ,"");
 
     }
+    public static String fun88HttpsPost(){
+
+//        String url= "http://c.spdex.com/dv_1_0_0_0_0_0";
+//        String url= "https://www.fun172.com/zh-cn/exchange/main.htm/ws/multiple-market-prices/329/qoivcqkm/xhr?t="+new Date().getTime();
+//        String url= "https://www.baidu.com";
+//        String url= "https://www.jd.com";
+//        String url= "https://www.fun172.com/zh-cn/home.htm";
+//        String url= "https://www.fun172.com/Exchange/customer/api/group/matchOdds/1575634906";
+        String url= "https://www.fun173.com/Exchange/customer/api/placeBets";
+
+
+//        String cookies = "LangKey=cs; _ga=GA1.2.34661574.1516547766; OddsType_SPONUUS01001=2; _pk_ref.3.37b9=%5B%22%22%2C%22%22%2C1517184672%2C%22http%3A%2F%2Fwww.fun88.com%2Fzh-CN%2FExchange%2Fsport%2Fevent%2F2022802%22%5D; _pk_id.3.37b9=0a36474e797f8547.1516546239.4.1517184843.1517184672.; ASP.NET_SessionId=1khjilk3shd3tkey20x2ofdz; CultureInfo=zh-CN; PlayerPreference=General; intro_BeforeLogin=1; BIAB_LANGUAGE=zh_CN; _ga=GA1.1.251109361.1516546237; _gid=GA1.1.1554929236.1518224672; _pk_id.4.37b9=a27bce561ebe857c.1518224672.1.1518224690.1518224672.; _pk_ses.4.37b9=*; i18next=zh_CN; BIAB_TZ=-480; comm100_guid2_100014005=TacBDGzY-0KSGitVAz4X4g; CSRF-TOKEN=da348d4cb307204b631739537d1a5db713; BIAB_SHOW_TOOLTIPS=false; cook88=2338760896.20480.0000";
+//        return doHttpsPost(url, null, "utf-8", "");
+        return httpGet(url ,"");
+
+    }
 
     public static void main(String[] args) {
 
 //        jinDou();
 //        bifaZhiShu();
-        fun88HttpsGet();
+//        fun88HttpsGet();
+        buyhttpsPost();
     }
 
+
+    private static void buyhttpsPost(){
+
+        String cookie = "intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; BIAB_CUSTOMER=8E7FA9A0CD96A6EF0FC6DB9784AA0A9C5CE656099A7EC9B788DE5A4B47E60514E1C3A7CE0767F58B66BBFE372C77951A3FE3F7DFC7F1D848; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520345287.1520343780.; CSRF-TOKEN=40dcfa2cc10c58d7401e123bfe12fcd3df";
+        String url = "https://www.fun173.com/Exchange/customer/api/placeBets";
+        Map<String,String> map = new HashMap<String,String>();
+
+        StringEntity stringEntity = new StringEntity("{\"1.140333033\":[{\"selectionId\":56323,\"side\":\"BACK\",\"size\":25,\"price\":2.82,\"persistenceType\":\"LAPSE\",\"handicap\":\"0\",\"eachWayData\":{}}]}","UTF-8");
+
+        try{
+            String body = doHttpsPostWithCookie(url, null, "utf-8", cookie, stringEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 }

@@ -11,38 +11,41 @@
 	  var evt = document.createEvent("MouseEvents");
 	  
 	  
-	  $("input.biab_size.js-size").focus();
-	   $("input.biab_size.js-size").val(10);
-	   var input =  $("input.biab_size.js-size");
-	   
-	   $("input.biab_size.js-size").keydown();
-	   
-	   $("input.biab_size.js-size").keyup();
-	   $("input.biab_size.js-size").change();
-	   $("input.biab_size.js-size").blur();
+	  doBet();
 	  
-	 //$("input.biab_size.js-size").focus();
-	   // var ev = new KeyboardEvent('keyup', {
-         //   keyCode: 65,
-			//bubbles: 'true',
-            //cancelable: 'true'
-        //});
-		
+	  
+	   $("input.biab_size.js-size").val(25);
+	   var input =  $("input.biab_size.js-size");
+	 
+	  
+	  $("#biab_placeBetsBtn").removeClass("biab_disabled");
+	  
+	 $("input.biab_size.js-size").focus();
+	  var ev = new KeyboardEvent('keyup', {
+             keyCode: 108,
+			 bubbles: 'true',
+             cancelable: 'false'
+        });
+	
 		 
         document.dispatchEvent(ev);
+	
+	
+	 document.addEventListener('keyup', function (event) {
+         console.log(String.fromCharCode(event.keyCode));
+     }, false);
+     var ev = new KeyboardEvent('keyup', {
+         keyCode: 65
+     });
+     document.dispatchEvent(ev);
+	
+	fireKeyEvent(input, 'keyup', 13);  
+	   
+	 // var e = document.createEvent("MouseEvents");
+      //e.initEvent("mousedown", true, true);
+      //document.getElementById("biab_placeBetsBtn").dispatchEvent(e);
 	  
 	   
-	  var e = document.createEvent("MouseEvents");
-      e.initEvent("mousedown", true, true);
-     // document.getElementById("biab_placeBetsBtn").dispatchEvent(e);
-	  
-	  $("#biab_cancelAllSelections").trigger("click");
-	  //evt.initMouseEvent( "mousedown", true, true, window, 1, 12, 345, 7, 220, false, false, true, false, 0, null );
-	  evt.initMouseEvent("click",true,true,document.defaultView,0,0,0,0,0,false,false,false,false,0,null);
-	  var btn = $(".biab_btn.biab_btn-info.js-place-bets-btn");
-	  var biab_placeBetsBtn = $("#biab_placeBetsBtn");
-	  //biab_placeBetsBtn.dispatchEvent(evt);
-	  parent.dispatchEvent(evt);
  
  },10000);
  
@@ -185,6 +188,27 @@
 
  },10000); 
 
+ 
+ 
+ function doBet(){
+ 
+		var buyarr = $(".biab_bet.biab_blue-cell.js-blue-cell.biab_bet-back.js-bet-back.biab_back-0.js-back-0")
+		
+        var salearr = $(".biab_bet.biab_green-cell.js-green-cell.biab_bet-lay.js-bet-lay.biab_lay-0.js-lay-0")
+		 var e = document.createEvent("MouseEvents");
+         e.initEvent("mousedown", true, true);
+        buyarr[1].dispatchEvent(e);
+		 
+		//  var e2 = document.createEvent("MouseEvents");
+         // e2.initEvent("mousedown", true, true);
+        //salearr[2].dispatchEvent(e2);
+		
+		
+ 
+ }
+ 
+ 
+ 
 
  //只有小于0.9 的时候才启动
  function  islittle1(  home,  away,  ping){
@@ -380,9 +404,32 @@
  }
  
  
+ 
+ function fireKeyEvent(el, evtType, keyCode){  
+ 
+         
+         
+           var evtObj = document.createEvent('UIEvents');  
+            Object.defineProperty(evtObj, 'keyCode', {  
+                get : function() { return this.keyCodeVal; }  
+            });       
+            Object.defineProperty(evtObj, 'which', {  
+                get : function() { return this.keyCodeVal; }  
+            });  
+            evtObj.initUIEvent( evtType, true, true, win, 1 );  
+            evtObj.keyCodeVal = keyCode;  
+            if (evtObj.keyCode !== keyCode) {  
+                console.log("keyCode " + evtObj.keyCode + " 和 (" + evtObj.which + ") 不匹配");  
+            }  
+          
+        el.dispatchEvent(evtObj);  
+   
+}  
+ 
+ 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
-    alert(request.action)
+    //alert(request.action)
     if (request.action == "getText");
     {
        

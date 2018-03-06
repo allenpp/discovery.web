@@ -4,6 +4,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -29,16 +30,16 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import sun.misc.BASE64Encoder;
 
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.security.KeyManagementException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HttpsUtils {
 
@@ -52,7 +53,7 @@ public class HttpsUtils {
     static {
         try {
             builder = new SSLContextBuilder();
-            // 全部信任 不做身份鉴定
+            // ??????? ??????????
             builder.loadTrustMaterial(null, new TrustStrategy() {
                 @Override
                 public boolean isTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
@@ -71,12 +72,12 @@ public class HttpsUtils {
         }
     }
     /**
-     * httpClient post请求
-     * @param url 请求url
-     * @param header 头部信息
-     * @param param 请求参数 form提交适用
-     * @param entity 请求实体 json/xml提交适用
-     * @return 可能为空 需要处理
+     * httpClient post????
+     * @param url ????url
+     * @param header ??????
+     * @param param ??????? form??????
+     * @param entity ??????? json/xml??????
+     * @return ??????? ???????
      * @throws Exception
      *
      */
@@ -86,23 +87,23 @@ public class HttpsUtils {
         try {
             httpClient = getHttpClient();
             HttpPost httpPost = new HttpPost(url);
-            // 设置头信息
+            // ????????
             if (MapUtils.isNotEmpty(header)) {
                 for (Map.Entry<String, String> entry : header.entrySet()) {
                     httpPost.addHeader(entry.getKey(), entry.getValue());
                 }
             }
-            // 设置请求参数
+            // ???????????
             if (MapUtils.isNotEmpty(param)) {
                 List<NameValuePair> formparams = new ArrayList<NameValuePair>();
                 for (Map.Entry<String, String> entry : param.entrySet()) {
-                    //给参数赋值
+                    //?????????
                     formparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
                 }
                 UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(formparams, Consts.UTF_8);
                 httpPost.setEntity(urlEncodedFormEntity);
             }
-            // 设置实体 优先级高
+            // ??????? ???????
             if (entity != null) {
                 httpPost.setEntity(entity);
             }
@@ -150,13 +151,13 @@ public class HttpsUtils {
 
 
     /**
-     * 设置代理
+     * ???????
      * @param builder
      * @param hostOrIP
      * @param port
      */
     public static HttpClientBuilder proxy(String hostOrIP, int port){
-        // 依次是代理地址，代理端口号，协议类型
+        // ?????????????????????Э??????
         HttpHost proxy = new HttpHost(hostOrIP, port, "socks5");
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
         return HttpClients.custom().setRoutePlanner(routePlanner);
@@ -164,23 +165,23 @@ public class HttpsUtils {
 
 
     /**
-     * 模拟请求
+     * ???????
      *
-     * @param url       资源地址
-     * @param map   参数列表
-     * @param encoding  编码
+     * @param url       ??????
+     * @param map   ?????б?
+     * @param encoding  ????
      * @return
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      * @throws IOException
      * @throws ClientProtocolException
      */
-    public static String doHttpsPost(String url, Map<String,String> map,String encoding,String cookie) throws KeyManagementException, NoSuchAlgorithmException, ClientProtocolException, IOException {
+    public static String doHttpsPost(String url, Map<String,String> map,String encoding,String cookie,StringEntity stringEntity) throws KeyManagementException, NoSuchAlgorithmException, ClientProtocolException, IOException {
         String body = "";
-        //采用绕过验证的方式处理https请求
+        //??????????????????https????
         SSLContext sslcontext = createIgnoreVerifySSL();
 
-        // 设置协议http和https对应的处理socket链接工厂的对象
+        // ????Э??http??https????????socket????????????
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 .register("https", new SSLConnectionSocketFactory(sslcontext))
@@ -202,7 +203,7 @@ public class HttpsUtils {
                     String value = he.getValue();
                     if (value != null && param.equalsIgnoreCase("timeout")) {
                         try {
-                            return Long.parseLong(value) * 1000;
+                            return Long.parseLong(value) * 111000;
                         } catch(NumberFormatException ignore) {
                         }
                     }
@@ -224,51 +225,163 @@ public class HttpsUtils {
 
 
 
-        //创建自定义的httpclient对象
+        //??????????httpclient????
         CloseableHttpClient client = HttpClients.custom().setConnectionManager(connManager).setKeepAliveStrategy(myStrategy).build();
 
 
-        //创建post方式请求对象
+        //????post??????????
         HttpPost httpPost = new HttpPost(url);
 
-        //装填参数
+        //??????
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         if(map!=null){
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
             }
         }
-        //设置参数到请求对象中
+        //???ò??????????????
         httpPost.setEntity(new UrlEncodedFormEntity(nvps, encoding));
-        httpPost.setHeader("cookie",cookie);
+        httpPost.setEntity(stringEntity);
+        httpPost.setHeader("cookie", cookie);
 
-        System.out.println("请求地址："+url);
-        System.out.println("请求参数："+nvps.toString());
+        System.out.println("????????"+url);
+        System.out.println("?????????"+nvps.toString());
 
-        //设置header信息
-        //指定报文头【Content-type】、【User-Agent】
+        //????header???
+        //??????????Content-type??????User-Agent??
         httpPost.setHeader("Content-type", "application/x-www-form-urlencoded");
         httpPost.setHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
 
-        //执行请求操作，并拿到结果（同步阻塞）
+
+        //???????????????????????????????
         CloseableHttpResponse response = client.execute(httpPost);
-        //获取结果实体
+        //?????????
         HttpEntity entity = response.getEntity();
         if (entity != null) {
-            //按指定编码转换结果实体为String类型
+            //???????????????????String????
             body = EntityUtils.toString(entity, encoding);
         }
         EntityUtils.consume(entity);
-        //释放链接
+        //???????
         response.close();
         return body;
     }
     /**
-     * 模拟请求
+     * ???????
      *
-     * @param url       资源地址
-     * @param map   参数列表
-     * @param encoding  编码
+     * @param url       ??????
+     * @param map   ?????б?
+     * @param encoding  ????
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws IOException
+     * @throws ClientProtocolException
+     */
+    public static String doHttpsPostWithTimeOut(String url, Map<String,String> map,String encoding,String cookie,StringEntity stringEntity) throws KeyManagementException, NoSuchAlgorithmException, ClientProtocolException, IOException {
+        String body = "";
+        //??????????????????https????
+        SSLContext sslcontext = createIgnoreVerifySSL();
+
+        // ????Э??http??https????????socket????????????
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", PlainConnectionSocketFactory.INSTANCE)
+                .register("https", new SSLConnectionSocketFactory(sslcontext))
+                .build();
+        PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+        HttpClients.custom().setConnectionManager(connManager);
+
+
+
+        ConnectionKeepAliveStrategy myStrategy = new ConnectionKeepAliveStrategy() {
+
+            public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+                // Honor 'keep-alive' header
+                HeaderElementIterator it = new BasicHeaderElementIterator(
+                        response.headerIterator());
+                while (it.hasNext()) {
+                    HeaderElement he = it.nextElement();
+                    String param = he.getName();
+                    String value = he.getValue();
+                    if (value != null && param.equalsIgnoreCase("timeout")) {
+                        try {
+                            return Long.parseLong(value) * 111000;
+                        } catch(NumberFormatException ignore) {
+                        }
+                    }
+                }
+                HttpHost target = (HttpHost) context.getAttribute(
+                        HttpClientContext.HTTP_TARGET_HOST);
+                if ("www.naughty-server.com".equalsIgnoreCase(target.getHostName())) {
+                    // Keep alive for 5 seconds only
+                    return 5 * 1000;
+                } else {
+                    // otherwise keep alive for 30 seconds
+                    return 30 * 1000;
+                }
+            }
+
+        };
+
+
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(15000).setConnectionRequestTimeout(11000)
+                .setSocketTimeout(15000).build();
+
+
+        //??????????httpclient????
+        CloseableHttpClient client = HttpClients.custom().setDefaultRequestConfig(requestConfig).setConnectionManager(connManager).setKeepAliveStrategy(myStrategy).build();
+
+
+        //????post??????????
+        HttpPost httpPost = new HttpPost(url);
+
+        //??????
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        if(map!=null){
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+            }
+        }
+        //???ò??????????????
+        httpPost.setEntity(new UrlEncodedFormEntity(nvps, encoding));
+        httpPost.setEntity(stringEntity);
+        httpPost.setHeader("cookie", cookie);
+
+        System.out.println("????????"+url);
+        System.out.println("?????????"+nvps.toString());
+
+        //????header???
+        //??????????Content-type??????User-Agent??
+        httpPost.setHeader("Content-type", "application/x-www-form-urlencoded");
+        httpPost.setHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+
+        httpPost.setHeader("Host","www.fun173.com");
+        httpPost.setHeader("Origin","https://www.fun173.com");
+        httpPost.setHeader("Referer","https://www.fun173.com/zh-cn/exchange/main.htm/sport/market/1.140333033");
+        httpPost.setHeader("User-Agent","Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36");
+        httpPost.setHeader("X-CSRF-TOKEN","30f92b53af235dfc0bdb8c020c8615bb2b");
+        httpPost.setHeader("X-Requested-With","XMLHttpRequest");
+
+        //???????????????????????????????
+        CloseableHttpResponse response = client.execute(httpPost);
+        //?????????
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            //???????????????????String????
+            body = EntityUtils.toString(entity, encoding);
+        }
+        EntityUtils.consume(entity);
+        //???????
+        response.close();
+        return body;
+    }
+    /**
+     * ???????
+     *
+     * @param url       ??????
+     * @param map   ?????б?
+     * @param encoding  ????
      * @return
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
@@ -277,10 +390,10 @@ public class HttpsUtils {
      */
     public static String doHttpsGet(String url, Map<String,String> map,String encoding) throws KeyManagementException, NoSuchAlgorithmException, ClientProtocolException, IOException {
         String body = "";
-        //采用绕过验证的方式处理https请求
+        //??????????????????https????
         SSLContext sslcontext = createIgnoreVerifySSL();
 
-        // 设置协议http和https对应的处理socket链接工厂的对象
+        // ????Э??http??https????????socket????????????
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 .register("https",  new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1.2"},
@@ -342,42 +455,42 @@ public class HttpsUtils {
 
 
 
-        //创建自定义的httpclient对象
+        //??????????httpclient????
         CloseableHttpClient client = HttpClients.custom().setConnectionManager(connManager).setKeepAliveStrategy((myStrategy)).build();
 //        CloseableHttpClient client = proxy("127.0.0.1", 1080).setConnectionManager(connManager).build();
-        //创建post方式请求对象
+        //????post??????????
         HttpGet httpGet = new HttpGet(url);
 
-        //装填参数
+        //??????
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         if(map!=null){
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
             }
         }
-        //设置参数到请求对象中
+        //???ò??????????????
 //        httpGet.setEntity(new UrlEncodedFormEntity(nvps, encoding));
 
-        System.out.println("请求地址："+url);
-        System.out.println("请求参数："+nvps.toString());
+        System.out.println("????????"+url);
+        System.out.println("?????????"+nvps.toString());
 
-        //设置header信息
-        //指定报文头【Content-type】、【User-Agent】
+        //????header???
+        //??????????Content-type??????User-Agent??
         httpGet.setHeader("Content-type", "application/x-www-form-urlencoded");
         httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
 
         try{
 
-            //执行请求操作，并拿到结果（同步阻塞）
+            //???????????????????????????????
             CloseableHttpResponse response = client.execute(httpGet);
-            //获取结果实体
+            //?????????
             HttpEntity entity = response.getEntity();
             if (entity != null) {
-                //按指定编码转换结果实体为String类型
+                //???????????????????String????
                 body = EntityUtils.toString(entity, encoding);
             }
             EntityUtils.consume(entity);
-            //释放链接
+            //???????
             response.close();
         }catch (Exception e){
             e.printStackTrace();
@@ -386,7 +499,7 @@ public class HttpsUtils {
     }
 
     /**
-     * 绕过验证
+     * ??????
      *
      * @return
      * @throws NoSuchAlgorithmException
@@ -395,7 +508,7 @@ public class HttpsUtils {
     public static SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext sc = SSLContext.getInstance("SSLv3");
 
-        // 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
+        // ??????X509TrustManager???????????????????????????????
         X509TrustManager trustManager = new X509TrustManager() {
             @Override
             public void checkClientTrusted(
@@ -429,16 +542,16 @@ public class HttpsUtils {
     public static String readHttpResponse(HttpResponse httpResponse)
             throws ParseException, IOException {
         StringBuilder builder = new StringBuilder();
-        // 获取响应消息实体
+        // ????????????
         HttpEntity entity = httpResponse.getEntity();
-        // 响应状态
+        // ?????
         builder.append("status:" + httpResponse.getStatusLine());
         builder.append("headers:");
         HeaderIterator iterator = httpResponse.headerIterator();
         while (iterator.hasNext()) {
             builder.append("\t" + iterator.next());
         }
-        // 判断响应实体是否为空
+        // ?ж?????????????
         if (entity != null) {
             String responseString = EntityUtils.toString(entity);
             builder.append("response length:" + responseString.length());
@@ -450,6 +563,15 @@ public class HttpsUtils {
 
 
     public static void main(String[] args) {
+//        test();
+
+        buyhttpsPost();
+//        genCrsfToken();
+    }
+
+
+
+    private static   void test(){
 
 //        String url = "https://www.baidu.com";
 //        String url = "https://www.fun172.com/Exchange/customer/api/event/details/2022802";
@@ -464,10 +586,47 @@ public class HttpsUtils {
 //            String url = "https://sso.tgb.com:8443/cas/login";
             String body = doHttpsGet(url, null, "utf-8");
 //            String body = doHttpsPost(url, null, "utf-8",cookie);
-            System.out.println("交易响应结果：");
+            System.out.println("????????????");
             System.out.println(body);
         }catch (Exception e){
 
         }
     }
+
+
+    private static void buyhttpsPost(){
+
+        String cookie = "intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; BIAB_CUSTOMER=8E7FA9A0CD96A6EF0FC6DB9784AA0A9C5CE656099A7EC9B788DE5A4B47E60514E1C3A7CE0767F58B66BBFE372C77951A3FE3F7DFC7F1D848; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520345287.1520343780.; CSRF-TOKEN="+genCrsfToken();
+        String url = "https://www.fun173.com/Exchange/customer/api/placeBets";
+        Map<String,String> map = new HashMap<String,String>();
+
+        StringEntity stringEntity = new StringEntity("{\"1.140333033\":[{\"selectionId\":56323,\"side\":\"BACK\",\"size\":25,\"price\":2.82,\"persistenceType\":\"LAPSE\",\"handicap\":\"0\",\"eachWayData\":{}}]}","UTF-8");
+
+        try{
+            String body = doHttpsPostWithTimeOut(url, null, "utf-8", cookie, stringEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private static  String   genCrsfToken( ) {
+        //定义一个字符串（A-Z，a-z，0-9）即62位；
+        String str="zxcvbnmlkjhgfdsaqwertyuiop1234567890";
+        //由Random生成随机数
+        Random random=new Random();
+        StringBuffer sb=new StringBuffer();
+        //长度为几就循环几次
+        for(int i=0; i<35; ++i){
+            //产生0-61的数字
+            int number=random.nextInt(35);
+            //将产生的数字通过length次承载到sb中
+            sb.append(str.charAt(number));
+        }
+        System.out.println(sb.toString());
+        //将承载的字符转换成字符串
+        return sb.toString();
+    }
+
+
 }

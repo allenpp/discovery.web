@@ -1,0 +1,274 @@
+1  buy  ****************************************************************************************************
+发起buy请求--------
+
+Request URL:https://www.fun173.com/Exchange/customer/api/placeBets
+Request Method:POST
+Status Code:200 OK
+Remote Address:135.84.237.38:443
+Referrer Policy:no-referrer-when-downgrade
+
+
+ResponseHeader
+Cache-Control:no-cache, no-store, max-age=0, must-revalidate
+Content-Type:application/json;charset=UTF-8
+Date:Tue, 06 Mar 2018 13:45:36 GMT
+Expires:0
+Pragma:no-cache
+Server:Akamai
+Set-Cookie:cook88=2204543168.20480.0000; expires=Tue, 13-Mar-2018 13:45:37 GMT; path=/;Domain=.fun173.com
+Transfer-Encoding:chunked
+X-Content-Type-Options:nosniff
+X-Frame-Options:DENY
+X-Frame-Options:SAMEORIGIN
+X-Powered-By:ARR/3.0
+X-XSS-Protection:1; mode=block
+
+
+
+
+Request Header
+Accept:application/json, text/javascript, */*; q=0.01
+Accept-Encoding:gzip, deflate, br
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Content-Length:134
+Content-Type:application/json;charset=UTF-8
+Cookie:intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_CUSTOMER=D9269D984493C7D7E5E4C210D57571CA583E707B1F318177DC49759392122AE0B15D96AFB09ADECFC5DF230D64DD9AEA48F1AE22A0823B37; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520343813.1520343780.; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; CSRF-TOKEN=30f92b53af235dfc0bdb8c020c8615bb2b
+Host:www.fun173.com
+Origin:https://www.fun173.com
+Referer:https://www.fun173.com/zh-cn/exchange/main.htm/sport/market/1.140333033
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+X-CSRF-TOKEN:30f92b53af235dfc0bdb8c020c8615bb2b
+X-Requested-With:XMLHttpRequest
+{1.140333033: [,…]}
+1.140333033
+:
+[,…]
+0
+:
+{selectionId: 56323, side: "BACK", size: 25, price: 2.88, persistenceType: "LAPSE", handicap: "0",…}
+
+
+
+Response 
+{"1.140333033":{"status":"OK","error":null,"offerIds":[452457]}}
+
+
+
+
+
+
+
+buy  ===========================================================================================================
+Request URL:https://www.fun173.com/Exchange/customer/api/placeBets
+Request Method:POST
+Status Code:200 OK
+Remote Address:135.84.237.38:443
+Referrer Policy:no-referrer-when-downgrade
+Cache-Control:no-cache, no-store, max-age=0, must-revalidate
+Content-Type:application/json;charset=UTF-8
+Date:Tue, 06 Mar 2018 14:09:44 GMT
+Expires:0
+Pragma:no-cache
+Server:Akamai
+Set-Cookie:cook88=2204543168.20480.0000; expires=Tue, 13-Mar-2018 14:09:45 GMT; path=/;Domain=.fun173.com
+Transfer-Encoding:chunked
+X-Content-Type-Options:nosniff
+X-Frame-Options:DENY
+X-Frame-Options:SAMEORIGIN
+X-Powered-By:ARR/3.0
+X-XSS-Protection:1; mode=block
+Accept:application/json, text/javascript, */*; q=0.01
+Accept-Encoding:gzip, deflate, br
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Content-Length:134
+Content-Type:application/json;charset=UTF-8
+Cookie:intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; BIAB_CUSTOMER=8E7FA9A0CD96A6EF0FC6DB9784AA0A9C5CE656099A7EC9B788DE5A4B47E60514E1C3A7CE0767F58B66BBFE372C77951A3FE3F7DFC7F1D848; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520345287.1520343780.; CSRF-TOKEN=4c69a7b39d467dc0e976659560e7f2b6ba
+Host:www.fun173.com
+Origin:https://www.fun173.com
+Referer:https://www.fun173.com/zh-cn/exchange/main.htm/sport/market/1.140333033
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+X-CSRF-TOKEN:4c69a7b39d467dc0e976659560e7f2b6ba
+X-Requested-With:XMLHttpRequest
+{"1.140333033":[{"selectionId":56323,"side":"BACK","size":25,"price":2.82,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]}
+
+
+
+buy  ===========================================================================================================
+
+
+
+1.1  发起查询状态请求---------------------------------
+
+Request URL:https://www.fun173.com/Exchange/customer/api/betsStatuses?betIds=452457
+Request Method:GET
+Status Code:200 OK
+Remote Address:135.84.237.38:443
+Referrer Policy:no-referrer-when-downgrade
+
+
+ResponseHeader----
+Cache-Control:no-cache, no-store, max-age=0, must-revalidate
+Content-Type:application/json;charset=UTF-8
+Date:Tue, 06 Mar 2018 13:45:37 GMT
+Expires:0
+Pragma:no-cache
+Server:Akamai
+Set-Cookie:cook88=2204543168.20480.0000; expires=Tue, 13-Mar-2018 13:45:38 GMT; path=/;Domain=.fun173.com
+Transfer-Encoding:chunked
+X-Content-Type-Options:nosniff
+X-Frame-Options:DENY
+X-Frame-Options:SAMEORIGIN
+X-Powered-By:ARR/3.0
+X-XSS-Protection:1; mode=block
+
+
+
+
+RequestHeader
+Accept:application/json, text/javascript, */*; q=0.01
+Accept-Encoding:gzip, deflate, br
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Cookie:intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_CUSTOMER=D9269D984493C7D7E5E4C210D57571CA583E707B1F318177DC49759392122AE0B15D96AFB09ADECFC5DF230D64DD9AEA48F1AE22A0823B37; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520343813.1520343780.; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; CSRF-TOKEN=10a60e97f332fb63b9e1a0c36ccdcf4741
+Host:www.fun173.com
+Referer:https://www.fun173.com/zh-cn/exchange/main.htm/sport/market/1.140333033
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+X-Requested-With:XMLHttpRequest
+QueryString Parameters
+betIds:452457
+
+Response 
+{"452457":"PENDING"}//挂起
+
+
+
+1.2  发起查询状态请求---------------------------------
+
+Request URL:https://www.fun173.com/Exchange/customer/api/betsStatuses?betIds=452457
+Request Method:GET
+Status Code:200 OK
+Remote Address:135.84.237.38:443
+Referrer Policy:no-referrer-when-downgrade
+
+
+Cache-Control:no-cache, no-store, max-age=0, must-revalidate
+Content-Type:application/json;charset=UTF-8
+Date:Tue, 06 Mar 2018 13:45:38 GMT
+Expires:0
+Pragma:no-cache
+Server:Akamai
+Set-Cookie:cook88=2204543168.20480.0000; expires=Tue, 13-Mar-2018 13:45:39 GMT; path=/;Domain=.fun173.com
+Transfer-Encoding:chunked
+X-Content-Type-Options:nosniff
+X-Frame-Options:DENY
+X-Frame-Options:SAMEORIGIN
+X-Powered-By:ARR/3.0
+X-XSS-Protection:1; mode=block
+
+
+Accept:application/json, text/javascript, */*; q=0.01
+Accept-Encoding:gzip, deflate, br
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Cookie:intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_CUSTOMER=D9269D984493C7D7E5E4C210D57571CA583E707B1F318177DC49759392122AE0B15D96AFB09ADECFC5DF230D64DD9AEA48F1AE22A0823B37; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520343813.1520343780.; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; CSRF-TOKEN=10a60e97f332fb63b9e1a0c36ccdcf4741
+Host:www.fun173.com
+Referer:https://www.fun173.com/zh-cn/exchange/main.htm/sport/market/1.140333033
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+X-Requested-With:XMLHttpRequest
+
+betIds:452457
+
+
+Response 
+{"452457":"MATCHED"}//匹配
+
+
+
+
+
+
+2 sale  ****************************************************************************************************
+
+
+Request URL:https://www.fun173.com/Exchange/customer/api/placeBets
+Request Method:POST
+Status Code:200 OK
+Remote Address:135.84.237.38:443
+Referrer Policy:no-referrer-when-downgrade
+
+
+
+Cache-Control:no-cache, no-store, max-age=0, must-revalidate
+Content-Type:application/json;charset=UTF-8
+Date:Tue, 06 Mar 2018 14:10:00 GMT
+Expires:0
+Pragma:no-cache
+Server:Akamai
+Set-Cookie:cook88=2204543168.20480.0000; expires=Tue, 13-Mar-2018 14:10:00 GMT; path=/;Domain=.fun173.com
+Transfer-Encoding:chunked
+X-Content-Type-Options:nosniff
+X-Frame-Options:DENY
+X-Frame-Options:SAMEORIGIN
+X-Powered-By:ARR/3.0
+X-XSS-Protection:1; mode=block
+
+
+
+Accept:application/json, text/javascript, */*; q=0.01
+Accept-Encoding:gzip, deflate, br
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Content-Length:132
+Content-Type:application/json;charset=UTF-8
+Cookie:intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; BIAB_CUSTOMER=8E7FA9A0CD96A6EF0FC6DB9784AA0A9C5CE656099A7EC9B788DE5A4B47E60514E1C3A7CE0767F58B66BBFE372C77951A3FE3F7DFC7F1D848; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520345287.1520343780.; CSRF-TOKEN=a851519f40d4c5ccd4c4b46c9837bb37b7
+Host:www.fun173.com
+Origin:https://www.fun173.com
+Referer:https://www.fun173.com/zh-cn/exchange/main.htm/sport/market/1.140333033
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+X-CSRF-TOKEN:a851519f40d4c5ccd4c4b46c9837bb37b7
+X-Requested-With:XMLHttpRequest
+
+request paramter
+ {"1.140333033":[{"selectionId":56323,"side":"LAY","size":35,"price":2.9,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]}
+ 
+ 
+ 
+2.1 查询sale状态---------------------------------------------
+
+
+Request URL:https://www.fun173.com/Exchange/customer/api/betsStatuses?betIds=452493
+Request Method:GET
+Status Code:200 OK
+Remote Address:135.84.237.38:443
+Referrer Policy:no-referrer-when-downgrade
+
+
+Cache-Control:no-cache, no-store, max-age=0, must-revalidate
+Content-Type:application/json;charset=UTF-8
+Date:Tue, 06 Mar 2018 14:10:01 GMT
+Expires:0
+Pragma:no-cache
+Server:Akamai
+Set-Cookie:cook88=2204543168.20480.0000; expires=Tue, 13-Mar-2018 14:10:01 GMT; path=/;Domain=.fun173.com
+Transfer-Encoding:chunked
+X-Content-Type-Options:nosniff
+X-Frame-Options:DENY
+X-Frame-Options:SAMEORIGIN
+X-Powered-By:ARR/3.0
+X-XSS-Protection:1; mode=block
+Accept:application/json, text/javascript, */*; q=0.01
+Accept-Encoding:gzip, deflate, br
+Accept-Language:zh-CN,zh;q=0.9
+
+
+Connection:keep-alive
+Cookie:intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; BIAB_CUSTOMER=8E7FA9A0CD96A6EF0FC6DB9784AA0A9C5CE656099A7EC9B788DE5A4B47E60514E1C3A7CE0767F58B66BBFE372C77951A3FE3F7DFC7F1D848; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520345287.1520343780.; CSRF-TOKEN=a851519f40d4c5ccd4c4b46c9837bb37b7
+Host:www.fun173.com
+Referer:https://www.fun173.com/zh-cn/exchange/main.htm/sport/market/1.140333033
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+X-Requested-With:XMLHttpRequest
+
+
+betIds:452493 

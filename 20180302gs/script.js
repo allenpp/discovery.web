@@ -11,36 +11,11 @@
 	  var evt = document.createEvent("MouseEvents");
 	  
 	  
-	  doBet();
+	 // doBet();
 	  
 	  
-	   $("input.biab_size.js-size").val(25);
-	   var input =  $("input.biab_size.js-size");
+	
 	 
-	  
-	  $("#biab_placeBetsBtn").removeClass("biab_disabled");
-	  
-	 $("input.biab_size.js-size").focus();
-	  var ev = new KeyboardEvent('keyup', {
-             keyCode: 108,
-			 bubbles: 'true',
-             cancelable: 'false'
-        });
-	
-		 
-        document.dispatchEvent(ev);
-	
-	
-	 document.addEventListener('keyup', function (event) {
-         console.log(String.fromCharCode(event.keyCode));
-     }, false);
-     var ev = new KeyboardEvent('keyup', {
-         keyCode: 65
-     });
-     document.dispatchEvent(ev);
-	
-	fireKeyEvent(input, 'keyup', 13);  
-	   
 	 // var e = document.createEvent("MouseEvents");
       //e.initEvent("mousedown", true, true);
       //document.getElementById("biab_placeBetsBtn").dispatchEvent(e);

@@ -5,6 +5,7 @@ import com.neo.discovery.mapper.RangSpfChangeMapper;
 import com.neo.discovery.mapper.SpfChangeMapper;
 import com.neo.discovery.mapper.WaveMapper;
 import com.neo.discovery.service.ChangeService;
+import com.neo.discovery.service.NoticeRule;
 import com.neo.discovery.service.WaveService;
 import com.neo.discovery.vo.*;
 import org.slf4j.Logger;
@@ -36,6 +37,11 @@ public class WaveServiceImpl implements WaveService {
     @Autowired
     private DataSourceTransactionManager txManager;
 
+    private List<NoticeRule> noticeList = new ArrayList<NoticeRule>();
+    @Autowired
+    private NoticeRule noticeSale;
+    @Autowired
+    private NoticeRule noticeBuy;
 
 
     @Transactional(propagation= Propagation.REQUIRED,rollbackFor=Exception.class,timeout=1,isolation= Isolation.DEFAULT)
@@ -57,6 +63,7 @@ public class WaveServiceImpl implements WaveService {
         if(null==wave||wave.getBuy_f1()==null){
             return 0;
         }
+        doNotice(wave);
 
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);// 事物隔离级别，开启新事务
@@ -85,5 +92,19 @@ public class WaveServiceImpl implements WaveService {
             logger.error("",e);
         }
         return list;
+    }
+
+
+    public void doNotice(Wave wave){
+
+        if(null!=noticeList&&noticeList.size()<1){
+            noticeList.add(noticeSale);
+            noticeList.add(noticeBuy);
+        }
+        if(null!=noticeList&&noticeList.size()>0){
+            for(NoticeRule noticeRule:noticeList){
+                noticeRule.notice(wave);
+            }
+        }
     }
 }

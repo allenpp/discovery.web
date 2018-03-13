@@ -19,4 +19,6 @@ public interface WaveService {
 
     List<Wave> selectWaveList(Wave wave);
 
+    List<Wave> selectGroupByMatchId(Wave wave);
+
 }

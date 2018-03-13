@@ -20,6 +20,8 @@ public interface WaveMapper {
 
     List<Wave> selectWaveList(Wave wave);
 
+    List<Wave> selectGroupByMatchId(Wave wave);
+
 
 
 }

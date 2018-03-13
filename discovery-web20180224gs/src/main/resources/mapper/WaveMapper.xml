@@ -138,6 +138,12 @@
         limit 10000
 
     </select>
+    <select id="selectGroupByMatchId"  parameterType = "com.neo.discovery.vo.Wave" resultType="com.neo.discovery.vo.Wave">
+
+
+        select  matchid,home,away  from wave where matchid is not null  and home is not null  group by matchid,home,away
+
+    </select>
 
 
 </mapper>

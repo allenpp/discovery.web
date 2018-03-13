@@ -93,7 +93,29 @@
  <%--<tr id="race1" >win <input   id="win1"  value="1" type="text"  />   eq :<input    id="eq1" value="3" type="text"   />  fail: <input    id="fail1" value="4" type="text"   />     </tr><br>--%>
  <%--<tr id="race2" >win <input   id="win2" value="2" type="text"  />   eq :<input    id="eq2"  value="3" type="text"   />  fail: <input    id="fail2" value="5"  type="text"   />   create<input id="create"  type="button"   onclick="create()" /> </tr>--%>
  <%--<tr><td>total:<input id="total" type="text" ></td></tr>--%>
+
  <table id="result" >
+     <form action="http://127.0.0.1/main/showZheXian"  id="myForm" method="get">
+     <try>
+         <td>
+     <select id="matchIds" name="matchId" cssClass="input4">
+         <c:forEach var="value" items="${matchIds}">
+             <option value="${value.matchId}">
+                     ${value.home}
+             </option>
+         </c:forEach>
+     </select>
+         </td>
+         <td>
+
+             <input type="hidden" id="matchId" value="" />
+             <input type="submit" id="submit" onclick="checkForm();">
+         </td>
+     </try>
+
+
+
+
      <input id="chartVo" type="hidden" value="  ${chartVo}" />
      <input id="buy_s1_list" type="hidden" value="  ${buy_s1_list}" />
      <input id="buy_p1_list" type="hidden" value="  ${buy_p1_list}" />
@@ -108,6 +130,15 @@
 
 
      <input id="xAxis" type="hidden" value="  ${xAxis}" />
+     </form>
  </table>
-
+ <script type="text/javascript">
+     function checkForm() {
+         var matchIds = document.getElementById('matchIds').value;
+         document.getElementById('matchId').value =matchIds;
+         var  url = "http://127.0.0.1/main/showZheXian?matchId="+matchIds
+         window.location.href = url;
+         return true;
+     }
+ </script>
 </body>

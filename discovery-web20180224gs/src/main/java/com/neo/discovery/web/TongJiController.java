@@ -36,20 +36,29 @@ public class TongJiController {
         public ModelAndView toIndex(HttpServletRequest request,Model model){
 //            int userId = Integer.parseInt(request.getParameter("id"));
 
-           List<RaceTeam> list  = raceTeamService.selectBaoLeng(null);
-            ModelAndView md = new ModelAndView();
-            md.addObject("list",list);
+//           List<RaceTeam> list  = raceTeamService.selectBaoLeng(null);
+            List<Wave> matchIds  = waveService.selectGroupByMatchId(null);
+            ModelAndView md = new ModelAndView("main");
+//            md.addObject("list",list);
+            md.addObject("matchIds",matchIds);
 
-            return new ModelAndView("main");
+            return md;
         }
         @RequestMapping("/showZheXian")
         public ModelAndView showZheXian(HttpServletRequest request,Model model){
-//            int userId = Integer.parseInt(request.getParameter("id"));
+            Object matchIdObj =  (request.getParameter("matchId"));
 
             ModelAndView md = new ModelAndView("main");
             try{
+                List<Wave> matchIds  = waveService.selectGroupByMatchId(null);
+                md.addObject("matchIds",matchIds);
+
+                Integer matchId = matchIds.get(0).getMatchId();
+                if(null!=matchIdObj){
+                    matchId = Integer.parseInt(matchIdObj.toString());
+                }
                 Wave wave = new Wave();
-                wave.setMatchId(28577378);
+                wave.setMatchId(matchId);
                 List<Wave> list  = waveService.selectWaveList(wave);
                 ChartVo chartVo = buildChartVo(list);
                 md.addObject("chartVo", JSON.toJSONString(chartVo));

@@ -94,6 +94,16 @@ public class WaveServiceImpl implements WaveService {
         return list;
     }
 
+    public List<Wave> selectGroupByMatchId(Wave wave) {
+        List<Wave>  list =  new ArrayList<Wave>();
+        try{
+            list =  waveMapper.selectGroupByMatchId(wave);
+        }catch (Exception e){
+            logger.error("",e);
+        }
+        return list;
+    }
+
 
     public void doNotice(Wave wave){
 

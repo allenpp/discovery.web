@@ -10,7 +10,7 @@
    ],
   "content_scripts": [
     {
-      "matches": ["https://www.fun173.com/zh-cn/exchange/main.htm*"],
+      "matches": ["https://www.fun173.com/zh-cn/exchange/main.htm*","http://135.84.237.201/zh-cn/exchange/main.htm*"],
       "js": ["jquery-3.2.1.min.js","script.js"]
 	  
     }

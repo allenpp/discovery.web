@@ -147,7 +147,10 @@
 	
 	var leagueMid = findLeagueNameMatchId();
 	
-	doInsert(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid);
+	var matchDate = $(".biab_market-date.biab_hidden-xs").text();
+	var matchDateStr = $(".biab_market-date.biab_hidden-xs").html();
+	
+	doInsert(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr);
 	
 	
 	
@@ -338,7 +341,7 @@
  
   
    
- function doInsert(buyPeiLv,salePeiLv,homeAway,buyAmout,saleAmout,leagueMid){
+ function doInsert(buyPeiLv,salePeiLv,homeAway,buyAmout,saleAmout,leagueMid,matchDateStr){
  
    var temp = {
    buy_s1:buyPeiLv[0],buy_p1:buyPeiLv[2],buy_f1:buyPeiLv[1],buy_s1_amount:buyAmout[0],buy_p1_amount:buyAmout[2],buy_f1_amount:buyAmout[1],
@@ -352,7 +355,8 @@
    
    
    home:homeAway[0],away:homeAway[1],
-   leagueName: leagueMid[0],matchId:leagueMid[1]
+   leagueName: leagueMid[0],matchId:leagueMid[1],
+   matchDateStr:matchDateStr
    
    
    }

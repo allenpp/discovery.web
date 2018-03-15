@@ -3,6 +3,7 @@ package com.neo.discovery.service.impl;
 import com.neo.discovery.domain.Constant;
 import com.neo.discovery.service.NoticeBase;
 import com.neo.discovery.service.NoticeRule;
+import com.neo.discovery.util.FileUtils;
 import com.neo.discovery.util.PropertiesFileUtils;
 import com.neo.discovery.util.mail.MailUtil;
 import com.neo.discovery.vo.Wave;
@@ -59,6 +60,11 @@ public class NoticeSale extends NoticeBase implements NoticeRule {
     private Float getValue(Properties pro,String key ){
         try{
             String value = pro.getProperty(key);
+            Object keyObj = pro.get(key);
+            boolean contons =  pro.keySet().contains(key);
+            if(!contons){
+                FileUtils.appendMethodA(PropertiesFileUtils.filePath, key + "=");
+            }
             return Float.parseFloat(value);
         }catch (Exception e){
             e.printStackTrace();

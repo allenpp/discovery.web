@@ -2,6 +2,7 @@ package com.neo.discovery.service.impl;
 
 import com.neo.discovery.domain.Constant;
 import com.neo.discovery.service.NoticeRule;
+import com.neo.discovery.util.FileUtils;
 import com.neo.discovery.util.PropertiesFileUtils;
 import com.neo.discovery.util.mail.MailUtil;
 import com.neo.discovery.vo.Wave;
@@ -21,7 +22,8 @@ public class NoticeBuy implements NoticeRule {
 
     @Override
     public void notice(Wave wave) {
-        String matchName = wave.getLeagueName().replace("\n", "") +"@"+ wave.getHome()+"V"+wave.getAway();
+        String matchName = wave.getLeagueName().replace("\n", "").replace(" ","") +"@"+ wave.getHome()+"V"+wave.getAway();
+        matchName = matchName.replace(" ","");
         Properties pro = PropertiesFileUtils.getProperties();
 
         //已经卖了
@@ -50,6 +52,11 @@ public class NoticeBuy implements NoticeRule {
     private Float getValue(Properties pro,String key ){
         try{
             String value = pro.getProperty(key);
+            Object keyObj = pro.get(key);
+            boolean contons =  pro.keySet().contains(key);
+            if(!contons){
+                FileUtils.appendMethodA(PropertiesFileUtils.filePath,key+"=");
+            }
             return Float.parseFloat(value);
         }catch (Exception e){
             e.printStackTrace();

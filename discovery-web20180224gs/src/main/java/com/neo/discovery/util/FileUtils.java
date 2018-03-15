@@ -190,14 +190,26 @@ public class FileUtils {
     public static void appendMethodA(String fileName, String content) {
         try {
             // 打开一个随机访问文件流，按读写方式
-            RandomAccessFile randomFile = new RandomAccessFile(fileName, "rw");
-            // 文件长度，字节数
-            long fileLength = randomFile.length();
-            //将写文件指针移到文件尾。
-            randomFile.seek(fileLength);
-            randomFile.writeBytes(content);
-            randomFile.close();
-        } catch (IOException e) {
+//            RandomAccessFile randomFile = new RandomAccessFile(fileName, "rw");
+//            // 文件长度，字节数
+//            long fileLength = randomFile.length();
+//            //将写文件指针移到文件尾。
+//            randomFile.seek(fileLength);
+////            randomFile.write(content.getBytes("utf-8"));
+//            randomFile.writeUTF(content);
+//            randomFile.close();
+
+
+            BufferedWriter  writer = new BufferedWriter (new OutputStreamWriter(new FileOutputStream(fileName,true),"utf-8"));
+            writer.write(content);
+            writer.write("\r\n");
+            writer.flush();
+            writer.close();
+
+
+
+
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -213,6 +225,22 @@ public class FileUtils {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public   static   void  appendMethodC(String file, String conent) {
+        BufferedWriter out = null ;
+        try  {
+            out = new  BufferedWriter( new  OutputStreamWriter(new  FileOutputStream(file,  true )));
+            out.write(conent);
+        } catch  (Exception e) {
+            e.printStackTrace();
+        } finally  {
+            try  {
+                out.close();
+            } catch  (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

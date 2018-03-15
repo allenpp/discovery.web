@@ -17,7 +17,7 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 public class PropertiesFileUtils {
 
 
-    private static String filePath = "C:\\Users\\Administrator\\Desktop\\金山\\matchBuy.txt";
+    public  static String filePath = "C:\\Users\\Administrator\\Desktop\\金山\\matchBuy.txt";
 
 
     /**

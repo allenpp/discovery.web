@@ -62,6 +62,7 @@ public class Wave {
 
     private Date createTime;
     private Date matchDate;
+    private String matchDateStr;
     private String home;
     private String away;
     private String leagueName;
@@ -454,5 +455,13 @@ public class Wave {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getMatchDateStr() {
+        return matchDateStr;
+    }
+
+    public void setMatchDateStr(String matchDateStr) {
+        this.matchDateStr = matchDateStr;
     }
 }

@@ -22,30 +22,35 @@ public class NoticeBuy implements NoticeRule {
 
     @Override
     public void notice(Wave wave) {
-        String matchName = wave.getLeagueName().replace("\n", "").replace(" ","") +"@"+ wave.getHome()+"V"+wave.getAway();
-        matchName = matchName.replace(" ","");
-        Properties pro = PropertiesFileUtils.getProperties();
+        try{
 
-        //已经卖了
-        Float sale_s1 = getValue(pro, matchName+Constant.SALE_S);
-        Float sale_p1 = getValue(pro, matchName+Constant.SALE_P);
-        Float sale_f1 = getValue(pro, matchName+Constant.SALE_F);
+            String matchName = wave.getLeagueName().replace("\n", "").replace(" ","") +"@"+ wave.getHome().replace("\n", "").replace(" ","")+"V"+wave.getAway();
+            matchName = matchName.replace(" ","");
+            Properties pro = PropertiesFileUtils.getProperties();
 
-        Float sale_s1_amount = getValue(pro, matchName+Constant.SALE_S_AMOUNT);
-        Float sale_p1_amount = getValue(pro, matchName+Constant.SALE_P_AMOUNT);
-        Float sale_f1_amount = getValue(pro, matchName+Constant.SALE_F_AMOUNT);
+            //已经卖了
+            Float sale_s1 = getValue(pro, matchName+Constant.SALE_S);
+            Float sale_p1 = getValue(pro, matchName+Constant.SALE_P);
+            Float sale_f1 = getValue(pro, matchName+Constant.SALE_F);
 
-        if(null!=wave){
-            if(null!=sale_s1&&wave.getBuy_s1()>sale_s1){
-                String content = builBuyContent(sale_s1, sale_s1_amount, wave.getBuy_s1());
-                MailUtil.sendMail(matchName + "need buy s1 ", content);
-            }else if(null!=sale_p1&&wave.getBuy_p1()>sale_p1){
-                String content = builBuyContent(sale_p1, sale_p1_amount, wave.getBuy_p1());
-                MailUtil.sendMail(matchName+"need buy p1 ",content);
-            }else if(null!=sale_f1&&wave.getBuy_f1()>sale_f1){
-                String content = builBuyContent(sale_f1,sale_f1_amount,wave.getBuy_f1());
-                MailUtil.sendMail(matchName+"need buy f1 ",content);
+            Float sale_s1_amount = getValue(pro, matchName+Constant.SALE_S_AMOUNT);
+            Float sale_p1_amount = getValue(pro, matchName+Constant.SALE_P_AMOUNT);
+            Float sale_f1_amount = getValue(pro, matchName+Constant.SALE_F_AMOUNT);
+
+            if(null!=wave){
+                if(null!=sale_s1&&wave.getBuy_s1()>sale_s1){
+                    String content = builBuyContent(sale_s1, sale_s1_amount, wave.getBuy_s1());
+                    MailUtil.sendMail(matchName + "need buy s1 ", content);
+                }else if(null!=sale_p1&&wave.getBuy_p1()>sale_p1){
+                    String content = builBuyContent(sale_p1, sale_p1_amount, wave.getBuy_p1());
+                    MailUtil.sendMail(matchName+"need buy p1 ",content);
+                }else if(null!=sale_f1&&wave.getBuy_f1()>sale_f1){
+                    String content = builBuyContent(sale_f1,sale_f1_amount,wave.getBuy_f1());
+                    MailUtil.sendMail(matchName+"need buy f1 ",content);
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

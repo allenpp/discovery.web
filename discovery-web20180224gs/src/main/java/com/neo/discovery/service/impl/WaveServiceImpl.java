@@ -45,6 +45,8 @@ public class WaveServiceImpl implements WaveService {
     private NoticeRule noticeBuy;
     @Autowired
     private NoticeRule noticeMatchDate;
+    @Autowired
+    private NoticeRule noticeChange;
 
 
     @Transactional(propagation= Propagation.REQUIRED,rollbackFor=Exception.class,timeout=1,isolation= Isolation.DEFAULT)
@@ -115,6 +117,7 @@ public class WaveServiceImpl implements WaveService {
             noticeList.add(noticeSale);
             noticeList.add(noticeBuy);
             noticeList.add(noticeMatchDate);
+            noticeList.add(noticeChange);
         }
         if(null!=noticeList&&noticeList.size()>0){
             for(NoticeRule noticeRule:noticeList){

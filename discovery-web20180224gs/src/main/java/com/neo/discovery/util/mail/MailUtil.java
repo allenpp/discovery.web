@@ -1,5 +1,6 @@
 package com.neo.discovery.util.mail;
 
+import com.sun.mail.util.MailSSLSocketFactory;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,15 @@ public class MailUtil {
     private static final String personal = MailConfig.personal;
     private static JavaMailSenderImpl mailSender = createMailSender();
 
+    private static final String HOST_QQ = "smtp.qq.com";
+    private static final Integer PORT_QQ = 465;
+    private static final String USERNAME_QQ = "710927120@qq.com";
+    private static final String PASSWORD_QQ = "iygiobnopvyobbch";
+    private static final String emailForm_QQ = "710927120@qq.com";
+    private static final String timeout_QQ = MailConfig.timeout;
+    private static final String personal_QQ = MailConfig.personal;
+    private static JavaMailSenderImpl mailSender_QQ = createQQMailSender();
+
     /**
      * 邮件发送器
      *
@@ -41,6 +51,34 @@ public class MailUtil {
         p.setProperty("mail.smtp.auth", "true");
         sender.setJavaMailProperties(p);
         return sender;
+    }
+    /**
+     * 邮件发送器
+     *
+     * @return 配置好的工具
+     */
+    private static JavaMailSenderImpl createQQMailSender() {
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender.setHost(HOST_QQ);
+        sender.setPort(PORT_QQ);
+        sender.setUsername(USERNAME_QQ);
+        sender.setPassword(PASSWORD_QQ);
+        sender.setDefaultEncoding("Utf-8");
+        try {
+
+            MailSSLSocketFactory sf = new MailSSLSocketFactory();
+            sf.setTrustAllHosts(true);
+            Properties p = new Properties();
+            p.setProperty("mail.smtp.timeout", timeout);
+            p.setProperty("mail.smtp.auth", "true");
+            p.put("mail.smtp.ssl.enable", "true");
+            p.put("mail.smtp.ssl.socketFactory", sf);
+            sender.setJavaMailProperties(p);
+            return sender;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -78,6 +116,19 @@ public class MailUtil {
             mailSender.send(mimeMessage);
         }catch (Exception e){
             e.printStackTrace();
+            try{
+
+                MimeMessage mimeMessage = mailSender_QQ.createMimeMessage();
+                // 设置utf-8或GBK编码，否则邮件会有乱码
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+                messageHelper.setFrom(emailForm_QQ, personal);
+                messageHelper.setTo("13691177451@163.com");
+                messageHelper.setSubject(subject);
+                messageHelper.setText(content, true);
+                mailSender_QQ.send(mimeMessage);
+            }catch (Exception e1){
+                e1.printStackTrace();
+            }
         }
 
 

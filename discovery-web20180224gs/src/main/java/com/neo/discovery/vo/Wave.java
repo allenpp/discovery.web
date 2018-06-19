@@ -60,6 +60,23 @@ public class Wave {
 
 
 
+    private Float buy_s_p;
+    private Float buy_s_f;
+    private Float buy_p_f;
+    private Float buy_s_p_amount;
+    private Float buy_s_f_amount;
+    private Float buy_p_f_amount;
+
+    private Float sale_s_p;
+    private Float sale_s_f;
+    private Float sale_p_f;
+    private Float sale_s_p_amount;
+    private Float sale_s_f_amount;
+    private Float sale_p_f_amount;
+
+
+
+
     private Date createTime;
     private Date matchDate;
     private String matchDateStr;
@@ -463,5 +480,102 @@ public class Wave {
 
     public void setMatchDateStr(String matchDateStr) {
         this.matchDateStr = matchDateStr;
+    }
+
+
+    public Float getBuy_s_p() {
+        return buy_s_p;
+    }
+
+    public void setBuy_s_p(Float buy_s_p) {
+        this.buy_s_p = buy_s_p;
+    }
+
+    public Float getBuy_s_f() {
+        return buy_s_f;
+    }
+
+    public void setBuy_s_f(Float buy_s_f) {
+        this.buy_s_f = buy_s_f;
+    }
+
+    public Float getBuy_p_f() {
+        return buy_p_f;
+    }
+
+    public void setBuy_p_f(Float buy_p_f) {
+        this.buy_p_f = buy_p_f;
+    }
+
+    public Float getBuy_s_p_amount() {
+        return buy_s_p_amount;
+    }
+
+    public void setBuy_s_p_amount(Float buy_s_p_amount) {
+        this.buy_s_p_amount = buy_s_p_amount;
+    }
+
+    public Float getBuy_s_f_amount() {
+        return buy_s_f_amount;
+    }
+
+    public void setBuy_s_f_amount(Float buy_s_f_amount) {
+        this.buy_s_f_amount = buy_s_f_amount;
+    }
+
+    public Float getBuy_p_f_amount() {
+        return buy_p_f_amount;
+    }
+
+    public void setBuy_p_f_amount(Float buy_p_f_amount) {
+        this.buy_p_f_amount = buy_p_f_amount;
+    }
+
+    public Float getSale_s_p() {
+        return sale_s_p;
+    }
+
+    public void setSale_s_p(Float sale_s_p) {
+        this.sale_s_p = sale_s_p;
+    }
+
+    public Float getSale_s_f() {
+        return sale_s_f;
+    }
+
+    public void setSale_s_f(Float sale_s_f) {
+        this.sale_s_f = sale_s_f;
+    }
+
+    public Float getSale_p_f() {
+        return sale_p_f;
+    }
+
+    public void setSale_p_f(Float sale_p_f) {
+        this.sale_p_f = sale_p_f;
+    }
+
+    public Float getSale_s_p_amount() {
+        return sale_s_p_amount;
+    }
+
+    public void setSale_s_p_amount(Float sale_s_p_amount) {
+        this.sale_s_p_amount = sale_s_p_amount;
+    }
+
+    public Float getSale_s_f_amount() {
+        return sale_s_f_amount;
+    }
+
+    public void setSale_s_f_amount(Float sale_s_f_amount) {
+        this.sale_s_f_amount = sale_s_f_amount;
+    }
+
+    public Float getSale_p_f_amount() {
+        return sale_p_f_amount;
+    }
+
+    public void setSale_p_f_amount(Float sale_p_f_amount) {
+        this.sale_p_f_amount = sale_p_f_amount;
     }
 }

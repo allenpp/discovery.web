@@ -92,6 +92,16 @@ public class WaveController {
         waveService.insert(wave);
         return  null;
     }
+    @RequestMapping(value="/update" ,method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView update(HttpServletRequest request,@RequestBody Wave wave){
+//    public ModelAndView insert(HttpServletRequest request ){
+//            int userId = Integer.parseInt(request.getParameter("id"));
+
+//        Wave wave = buildParam(request);
+        waveService.updateWaveByMatchId(wave);
+        return  null;
+    }
 
     @RequestMapping(value="/insertGet" ,method = RequestMethod.GET)
     @ResponseBody

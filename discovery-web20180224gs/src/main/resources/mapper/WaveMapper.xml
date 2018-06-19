@@ -58,7 +58,26 @@
         home,
         away,
         leagueName,
-        json )
+        json ,
+
+
+       buy_s_p,
+       buy_s_f,
+       buy_p_f,
+       buy_s_p_amount,
+       buy_s_f_amount,
+       buy_p_f_amount,
+
+       sale_s_p,
+       sale_s_f,
+       sale_p_f,
+       sale_s_p_amount,
+       sale_s_f_amount,
+       sale_p_f_amount
+
+
+
+        )
         values (
 
 
@@ -113,7 +132,23 @@
          #{home},
          #{away},
           #{leagueName},
-         #{json}
+         #{json},
+
+
+        #{buy_s_p},
+         #{buy_s_f},
+         #{buy_p_f},
+         #{buy_s_p_amount},
+         #{buy_s_f_amount},
+         #{buy_p_f_amount},
+
+         #{sale_s_p},
+         #{sale_s_f},
+         #{sale_p_f},
+         #{sale_s_p_amount},
+         #{sale_s_f_amount},
+         #{sale_p_f_amount}
+
 
         );
 
@@ -144,6 +179,49 @@
         select  matchid,home,away  from wave where matchid is not null  and home is not null  group by matchid,home,away
 
     </select>
+    <select id="selectFirstRecord"  parameterType = "com.neo.discovery.vo.Wave" resultType="com.neo.discovery.vo.Wave">
+
+
+        select  id   from wave  order  by  id desc  limit 1
+
+    </select>
+    <update id="updateWaveByMatchId"  parameterType = "com.neo.discovery.vo.Wave"  >
+
+
+        update wave   set
+
+       buy_s_p  =     #{buy_s_p},
+       buy_s_f  =   #{buy_s_f},
+       buy_p_f  = #{buy_p_f},
+       buy_s_p_amount  =  #{buy_s_p_amount},
+       buy_s_f_amount  = #{buy_s_f_amount},
+       buy_p_f_amount  = #{buy_p_f_amount},
+
+       sale_s_p  =  #{sale_s_p},
+       sale_s_f  =   #{sale_s_f},
+       sale_p_f  = #{sale_p_f},
+       sale_s_p_amount  =  #{sale_s_p_amount},
+       sale_s_f_amount  = #{sale_s_f_amount},
+       sale_p_f_amount  =   #{sale_p_f_amount}
+
+         where  id = #{id}
+
+    </update>
+
+    <!--  计算 每 3分钟 的 平均值   select date_format(FLOOR(createTime/300)*300, '%H:%i') AA,avg(buy_s1) ,avg(sale_s1) ,avg(buy_P1)  ,avg(sale_p1),avg(buy_F1)   ,avg(sale_f1) from wave   where  1=1   and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())
+
+group  by  date_format(FLOOR(createTime/300)*300, '%H:%i')  -->
+
+
+    <select id="selectAvgByGroupTime"  parameterType = "com.neo.discovery.vo.TongJiDto" resultType="com.neo.discovery.vo.TongJiDto">
+
+
+select date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i') timeZone,avg(buy_s1) buy_s1_avg ,avg(sale_s1) sale_s1_avg,avg(buy_P1)  buy_p1_avg,avg(sale_p1)  sale_p1_avg  ,avg(buy_F1)  buy_f1_avg ,avg(sale_f1) sale_f1_avg from wave
+where  1=1   and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')
+
+
+    </select>
+
 
 
 </mapper>

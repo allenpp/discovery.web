@@ -110,6 +110,14 @@ public class WaveServiceImpl implements WaveService {
         return list;
     }
 
+    public Integer updateWaveByMatchId(Wave wave) {
+        Wave result = waveMapper.selectFirstRecord(wave);
+        wave.setId(result.getId());
+        waveMapper.updateWaveByMatchId(wave);
+        return null;
+    }
+
+
 
     public void doNotice(Wave wave){
 

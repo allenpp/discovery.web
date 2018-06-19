@@ -21,4 +21,10 @@ public interface WaveService {
 
     List<Wave> selectGroupByMatchId(Wave wave);
 
+
+    Integer updateWaveByMatchId(Wave wave);
+
+
+
+
 }

@@ -149,10 +149,15 @@
 	
 	var matchDate = $(".biab_market-date.biab_hidden-xs").text();
 	var matchDateStr = $(".biab_market-date.biab_hidden-xs").html();
+	var dufa = $(".biab_market-name.biab_hidden-xs").text();
+	if(dufa=='独赢盘'){
+		doInsert(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr,dufa);
+	}else if(dufa=='双重机会'){
+		doInsertShuangChongJiHui(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr,dufa);
+	}
 	
-	doInsert(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr);
 	
-	
+	 
 	
 	
 	
@@ -341,7 +346,7 @@
  
   
    
- function doInsert(buyPeiLv,salePeiLv,homeAway,buyAmout,saleAmout,leagueMid,matchDateStr){
+ function doInsert(buyPeiLv,salePeiLv,homeAway,buyAmout,saleAmout,leagueMid,matchDateStr,dufa){
  
    var temp = {
    buy_s1:buyPeiLv[0],buy_p1:buyPeiLv[2],buy_f1:buyPeiLv[1],buy_s1_amount:buyAmout[0],buy_p1_amount:buyAmout[2],buy_f1_amount:buyAmout[1],
@@ -356,7 +361,8 @@
    
    home:homeAway[0],away:homeAway[1],
    leagueName: leagueMid[0],matchId:leagueMid[1],
-   matchDateStr:matchDateStr
+   matchDateStr:matchDateStr,
+   dufa:dufa
    
    
    }
@@ -382,6 +388,48 @@
  
  }
  
+ 
+ 
+ 
+ 
+  function doInsertShuangChongJiHui(buyPeiLv,salePeiLv,homeAway,buyAmout,saleAmout,leagueMid,matchDateStr,dufa){
+ 
+   var temp = {
+   buy_s_p:buyPeiLv[0],buy_s_f:buyPeiLv[2],buy_p_f:buyPeiLv[1],buy_s_p_amount:buyAmout[0],buy_s_f_amount:buyAmout[2],buy_p_f_amount:buyAmout[1],
+   sale_s_p:salePeiLv[0],sale_s_f:salePeiLv[2],sale_p_f:salePeiLv[1],sale_s_p_amount:saleAmout[0],sale_s_f_amount:saleAmout[2],sale_p_f_amount:saleAmout[1],
+   
+ 
+ 
+   
+   
+   home:homeAway[0],away:homeAway[1],
+   leagueName: leagueMid[0],matchId:leagueMid[1],
+   matchDateStr:matchDateStr,
+   dufa:dufa
+   
+   
+   }
+   var json = JSON.stringify(temp);
+ 
+   $.ajax({
+                    url: "http://127.0.0.1/wave/update",
+                    type: "POST",
+                    datatype:"JSON",
+					method: 'POST',
+					contentType:"application/json;",
+                    data: json ,
+                    success: function (data) {
+                        console.log("");
+                    },
+                    error: function () {
+                        console.log("提交失败！");
+                    }
+                });
+ 
+  
+ 
+ 
+ }
  
  
  function fireKeyEvent(el, evtType, keyCode){  

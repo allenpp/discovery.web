@@ -73,8 +73,8 @@
        sale_p_f,
        sale_s_p_amount,
        sale_s_f_amount,
-       sale_p_f_amount
-
+       sale_p_f_amount,
+       dufa
 
 
         )
@@ -147,7 +147,8 @@
          #{sale_p_f},
          #{sale_s_p_amount},
          #{sale_s_f_amount},
-         #{sale_p_f_amount}
+         #{sale_p_f_amount},
+         #{dufa}
 
 
         );

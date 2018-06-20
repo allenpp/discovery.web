@@ -84,6 +84,7 @@ public class Wave {
     private String away;
     private String leagueName;
     private String json;
+    private String dufa;
 
 
     private Date beginTime;
@@ -577,5 +578,13 @@ public class Wave {
 
     public void setSale_p_f_amount(Float sale_p_f_amount) {
         this.sale_p_f_amount = sale_p_f_amount;
+    }
+
+    public String getDufa() {
+        return dufa;
+    }
+
+    public void setDufa(String dufa) {
+        this.dufa = dufa;
     }
 }

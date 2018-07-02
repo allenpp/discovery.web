@@ -1,9 +1,6 @@
 package com.neo.discovery.service;
 
-import com.neo.discovery.vo.HalfQuanSpfChange;
-import com.neo.discovery.vo.RangSpfChange;
-import com.neo.discovery.vo.SpfChange;
-import com.neo.discovery.vo.Wave;
+import com.neo.discovery.vo.*;
 
 import java.util.List;
 
@@ -19,7 +16,12 @@ public interface WaveService {
 
     List<Wave> selectWaveList(Wave wave);
 
+    List<TongJiDto> selectAvgByGroupTime(TongJiDto wave);
+
     List<Wave> selectGroupByMatchId(Wave wave);
+
+
+    List<Wave> selectMaxPeiLv(Wave wave);
 
 
     Integer updateWaveByMatchId(Wave wave);

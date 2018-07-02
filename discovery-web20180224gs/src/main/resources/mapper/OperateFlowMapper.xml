@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neo.discovery.mapper.OptFlowMapper">
+
+
+    <insert id="insert"  parameterType="com.neo.discovery.vo.OptFlow">
+
+        insert into operate_flow(
+        matchId,
+        createTime,
+        matchDate,
+        home,
+        away,
+        leagueName,
+        json ,
+        optType,
+        optPeiLv,
+        optAmount,
+        dufa
+        )
+        values (
+          #{ matchId},
+          #{createTime},
+        #{matchDate},
+         #{home},
+         #{away},
+          #{leagueName},
+         #{json},
+         #{optType},
+         #{optPeiLv},
+         #{optAmount},
+         #{dufa}
+        );
+
+    </insert>
+
+
+
+    <select id="selectOptFlowList"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
+
+        select * from operate_flow where  1=1
+        <if test="matchId != null ">
+            and matchId =#{matchId}
+        </if>
+
+        <if test="beginTime != null ">
+            and createTime >#{beginTime}
+        </if>
+        <if test="endTime != null ">
+            and  #{endTime} >createTime
+        </if>
+
+        limit 10000
+
+    </select>
+    <select id="selectGroupByMatchId"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
+
+
+        select  matchid,home,away  from operate_flow where matchid is not null  and home is not null  group by matchid,home,away
+
+    </select>
+    <select id="selectFirstRecord"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
+
+
+        select  id   from operate_flow  order  by  id desc  limit 1
+
+    </select>
+    <select id="isBettingRecord"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
+
+
+        select  *   from operate_flow where ( status = '1' or status = '0'  ) order  by  id desc  limit 1
+
+    </select>
+    <update id="updateOperateFlowByMatchId"  parameterType = "com.neo.discovery.vo.OptFlow"  >
+
+
+        update operate_flow   set
+
+         status  =     #{status},
+
+         where  id = #{id}  and matchid = #{matchid}  and  status =''
+
+    </update>
+
+    <!--  计算 每 3分钟 的 平均值   select date_format(FLOOR(createTime/300)*300, '%H:%i') AA,avg(buy_s1) ,avg(sale_s1) ,avg(buy_P1)  ,avg(sale_p1),avg(buy_F1)   ,avg(sale_f1) from wave   where  1=1   and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())
+
+group  by  date_format(FLOOR(createTime/300)*300, '%H:%i')  -->
+
+
+    <select id="selectAvgByGroupTime"  parameterType = "com.neo.discovery.vo.TongJiDto" resultType="com.neo.discovery.vo.TongJiDto">
+
+
+select date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i') timeZone,avg(buy_s1) buy_s1_avg ,avg(sale_s1) sale_s1_avg,avg(buy_P1)  buy_p1_avg,avg(sale_p1)  sale_p1_avg  ,avg(buy_F1)  buy_f1_avg ,avg(sale_f1) sale_f1_avg from wave
+where  1=1   and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')
+
+
+    </select>
+
+
+
+</mapper>

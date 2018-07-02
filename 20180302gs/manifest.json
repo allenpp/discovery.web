@@ -5,6 +5,11 @@
   "description": "I Love Flutter ",
    "permissions": [
       "*://*/",
+	  "webRequest",
+	  "webRequestBlocking",
+        "storage",  
+        "http://*/*",  
+        "https://*/*",
     "tabs", "*://*/*", "webRequest", "webRequestBlocking"  
    
    ],

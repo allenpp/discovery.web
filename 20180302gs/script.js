@@ -26,7 +26,7 @@
  
  
  var time = 0;
- 
+ var  hasPlaceBet = 200;
  window.setInterval(function(){
  time++;
  if(time/60==1){
@@ -152,6 +152,7 @@
 	var dufa = $(".biab_market-name.biab_hidden-xs").text();
 	if(dufa=='独赢盘'){
 		doInsert(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr,dufa);
+		doPlaceBet(hasPlaceBet);
 	}else if(dufa=='双重机会'){
 		doInsertShuangChongJiHui(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr,dufa);
 	}
@@ -384,12 +385,189 @@
                 });
  
   
+  
+  
+  
+  	    
+ 
+   $.ajax({
+                    url: "http://127.0.0.1/wave/isDoBet",
+                    type: "POST",
+                    datatype:"JSON",
+					method: 'POST',
+					contentType:"application/json;",
+                    data: json ,
+                    success: function (data) {
+						if(null!=data){
+							
+						}
+                        console.log("");
+                    },
+                    error: function () {
+                        console.log("提交失败！");
+                    }
+                });
+  
+  
  
  
  }
  
  
+ function  doPlaceBet(){
+	 
+	 var crstoken =  getCookie('CSRF-TOKEN');
+	 var cookie = document.cookie;
+	 if(false){
+		 
+	    var temp =   {"1.145000241":[{"selectionId":1408,"side":"BACK","size":25,"price":1.52,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]}
  
+	    var json = JSON.stringify(temp);
+		
+		
+ 
+        $.ajax({
+                    url: "http://135.84.237.201/Exchange/customer/api/placeBets",
+                    type: "POST",
+                    dataType:'json',
+					// jsonp: "callbackparam",   
+					contentType:"application/json;",
+					headers:{'X-CSRF-TOKEN':crstoken,'Cookie':cookie},
+                    data: json ,
+					crossDomain: true,
+					async : false,
+					xhrFields: {
+						withCredentials: true
+					},
+                    success: function (data) {
+                        console.log(data);
+                    },
+                   function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(XMLHttpRequest);
+						console.log(errorThrown);
+						console.log(textStatus);
+                    },
+					 complete: function(aa,bb,cc) {
+						 console.log();
+                          //请求完成的处理
+                     },
+					  error: function(aa,bb,cc) {
+						   console.log();
+                          //请求完成的处理
+                     }
+                });
+				
+				
+		   $.ajax({
+                    url: "http://135.84.237.201/Exchange/customer/api/betsStatuses?betIds=660932",
+                    type: "GET",
+                    dataType:'json',
+					// jsonp: "callbackparam",   
+					contentType:"application/json;",
+					headers:{'X-CSRF-TOKEN':crstoken,'Cookie':cookie},
+                   // data: json ,
+					crossDomain: true,
+					async :false,
+					xhrFields: {
+						withCredentials: true
+					},
+                    success: function (data) {
+                        console.log(data);
+                    },
+                   function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(XMLHttpRequest);
+						console.log(errorThrown);
+						console.log(textStatus);
+                    },
+					 complete: function(aa,bb,cc) {
+						 console.log();
+                          //请求完成的处理
+                     },
+					  error: function(aa,bb,cc) {
+						   console.log();
+                          //请求完成的处理
+                     }
+                });
+				
+				
+					   $.ajax({
+                    url: "http://135.84.237.201/Exchange/customer/api/account/balance",
+                    type: "GET",
+                    dataType:'json',
+					// jsonp: "callbackparam",   
+					contentType:"application/json;",
+					headers:{'X-CSRF-TOKEN':crstoken,'Cookie':cookie},
+                   // data: json ,
+					crossDomain: true,
+					async :false,
+					xhrFields: {
+						withCredentials: true
+					},
+                    success: function (data) {
+                        console.log("");
+                    },
+                   function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(XMLHttpRequest);
+						console.log(errorThrown);
+						console.log(textStatus);
+                    },
+					 complete: function(aa,bb,cc) {
+						 console.log();
+                          //请求完成的处理
+                     },
+					  error: function(aa,bb,cc) {
+						   console.log();
+                          //请求完成的处理
+                     }
+                });
+		 
+	 }
+ 
+	 
+ }
+ 
+ 
+ function isShouldDobet(wave){
+	 
+	    var json = JSON.stringify(wave);
+ 
+   $.ajax({
+                    url: "http://127.0.0.1/wave/isDoBet",
+                    type: "POST",
+                    datatype:"JSON",
+					method: 'POST',
+					contentType:"application/json;",
+                    data: json ,
+                    success: function (data) {
+						if(null!=data){
+							
+						}
+                        console.log("");
+                    },
+                    error: function () {
+                        console.log("提交失败！");
+                    }
+                });
+ 
+	 
+	 
+	 
+ }
+ 
+ 
+ 
+ 
+ 
+ function getCookie(key){
+	var arr1=document.cookie.split("; ");//由于cookie是通过一个分号+空格的形式串联起来的，所以这里需要先按分号空格截断,变成[name=Jack,pwd=123456,age=22]数组类型；
+	for(var i=0;i<arr1.length;i++){
+		var arr2=arr1[i].split("=");//通过=截断，把name=Jack截断成[name,Jack]数组；
+		if(arr2[0]==key){
+			return decodeURI(arr2[1]);
+		}
+	}
+
+ }
  
  
   function doInsertShuangChongJiHui(buyPeiLv,salePeiLv,homeAway,buyAmout,saleAmout,leagueMid,matchDateStr,dufa){

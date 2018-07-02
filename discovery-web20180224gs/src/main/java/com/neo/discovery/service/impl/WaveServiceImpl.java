@@ -109,6 +109,24 @@ public class WaveServiceImpl implements WaveService {
         }
         return list;
     }
+    public List<Wave> selectMaxPeiLv(Wave wave) {
+        List<Wave>  list =  new ArrayList<Wave>();
+        try{
+            list =  waveMapper.selectMaxPeiLv(wave);
+        }catch (Exception e){
+            logger.error("",e);
+        }
+        return list;
+    }
+    public List<TongJiDto> selectAvgByGroupTime(TongJiDto wave) {
+        List<TongJiDto>  list =  new ArrayList<TongJiDto>();
+        try{
+            list =  waveMapper.selectAvgByGroupTime(wave);
+        }catch (Exception e){
+            logger.error("",e);
+        }
+        return list;
+    }
 
     public Integer updateWaveByMatchId(Wave wave) {
         Wave result = waveMapper.selectFirstRecord(wave);

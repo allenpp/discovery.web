@@ -218,7 +218,15 @@ group  by  date_format(FLOOR(createTime/300)*300, '%H:%i')  -->
 
 
 select date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i') timeZone,avg(buy_s1) buy_s1_avg ,avg(sale_s1) sale_s1_avg,avg(buy_P1)  buy_p1_avg,avg(sale_p1)  sale_p1_avg  ,avg(buy_F1)  buy_f1_avg ,avg(sale_f1) sale_f1_avg from wave
-where  1=1   and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')
+where  1=1   and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')  order  by createTime desc
+
+
+    </select>
+    <select id="selectMaxPeiLv"  parameterType = "com.neo.discovery.vo.TongJiDto" resultType="com.neo.discovery.vo.TongJiDto">
+
+
+select max(buy_s1) maxBuy_s ,max(sale_s1) maxSale_s,max(buy_P1)  maxBuy_p,max(sale_p1)  maxSale_p  ,max(buy_F1)  maxBuy_f ,max(sale_f1) maxSale_f from wave
+where  1=1   and   matchid = #{matchid} and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')  order  by createTime desc
 
 
     </select>

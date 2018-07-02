@@ -25,6 +25,104 @@ X-Requested-With:XMLHttpRequest
  
  
  
+ 取消
+ 
+ 查询状态
+ http://135.84.237.201/Exchange/customer/api/betsStatuses?betIds=660932
+ 
+ 返回  {"660932":"PLACED"}  表示 挂起
+ 
+ 返回  {"660932":"CANCELLED"} 表示 成功
+ 
+ 
+ 买的 ajax模拟  
+ 
+ Request URL:http://135.84.237.201/Exchange/customer/api/placeBets
+Request Method:POST
+Status Code:405 Method Not Allowed
+Remote Address:135.84.237.201:80
+Referrer Policy:no-referrer-when-downgrade
+
+
+
+Cache-Control:no-cache, no-store, max-age=0, must-revalidate
+Content-Type:application/json;charset=UTF-8
+Date:Mon, 02 Jul 2018 03:23:24 GMT
+Expires:0
+Pragma:no-cache
+Server:Akamai
+Set-Cookie:cook88=2321983680.31775.0000; expires=Mon, 09-Jul-2018 03:23:25 GMT; path=/
+Transfer-Encoding:chunked
+X-Content-Type-Options:nosniff
+X-Frame-Options:DENY
+X-Frame-Options:SAMEORIGIN
+X-Powered-By:ARR/3.0
+X-XSS-Protection:1; mode=block
+Accept:application/json, text/javascript, */*; q=0.01
+Accept-Encoding:gzip, deflate
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Content-Length:132
+Content-Type:application/json;
+Cookie:cook88=2321983680.31775.0000; AFF=100003; MPR=New/Not Qualify 1; MemberLevel=Gold; PLLC=Continuing; LTDCN=Lifetime Sm.50; intro_AfterLoginliu710927120=1; _ga=GA1.1.2089036263.1530015520; BIAB_HOW_TO_LINKS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_SHOW_TOOLTIPS=true; ASP.NET_SessionId=dza0vvpvif0u24otaxs45amd; isLogin=1; MC=liu710927120; BIAB_LANGUAGE=zh_CN; CultureInfo=zh-CN; coldSession=F11C8FCF442024006CA59D1D09938AC90C1ACC56710BF5EE767A7A5B82DE13D4C60779381F9FEEA6FA3C32FFD816A4B42287C2A43A6AC32603764186A45B7B5AEE569136A4F57856978F7665360423C55BE2C11B42E2FB11AAFBD38134AB9B2BE7D8A66EFA1023C06721A8C20DEEC867; warmSession=3DE098C9888E6CF718E47B553265A81EAB7AE22D367D48AE66C908873E971FBBCF6C9BC1E24EE45B35526AF622614A61A0FD06911D003E6C4909E0A046B8AB88D7F03D9F4A8BB62E4386EB96EFC9798F4EF3D75BD021B2F8C40CCB8F354471BF92E8E732E7678CA2D1C6F154E6C2D9CE; PlayerPreference=General; _gid=GA1.1.2054176041.1530501051; _pk_ses.4.1e6e=*; CSRF-TOKEN=3e5e0f2423cf34a21dcdc074fac789d428; BIAB_CUSTOMER=20DFB7355A1ADF43753BE99A7537220126CB5C090A49A9918F43CA8141EDF9F30C047FCA3B401A6BE63508524DFB80CF1551CC6062F3D593; _gat=1; _pk_id.4.1e6e=0a36474e797f8547.1530015520.4.1530501787.1530501051.
+Host:135.84.237.201
+Origin:http://135.84.237.201
+Referer:http://135.84.237.201/cn/exchange/main.htm/sport/market/1.145000241
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+X-CSRF-TOKEN:20180e71d0206238a2954a2de11e8525a2
+{"1.145000241":[{"selectionId":1408,"side":"LAY","size":25,"price":1.52,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]}
+ 
+ 
+ 
+ **************************************************************************20180702 buy baxi *************************************************************************************************************
+ 
+ Request URL:http://135.84.237.201/Exchange/customer/api/placeBets
+Request Method:POST
+Status Code:200 OK
+Remote Address:135.84.237.201:80
+Referrer Policy:no-referrer-when-downgrade
+
+
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: application/json;charset=UTF-8
+Expires: 0
+Server: Akamai
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+X-Powered-By: ARR/3.0
+X-Frame-Options: SAMEORIGIN
+Date: Mon, 02 Jul 2018 06:55:26 GMT
+Set-Cookie: cook88=2321983680.31775.0000; expires=Mon, 09-Jul-2018 06:55:27 GMT; path=/
+
+
+
+POST /Exchange/customer/api/placeBets HTTP/1.1
+Host: 135.84.237.201
+Connection: keep-alive
+Content-Length: 133
+Origin: http://135.84.237.201
+X-CSRF-TOKEN: 716409c29f5b771a1b196823c3f12c722c
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+Referer: http://135.84.237.201/cn/exchange/main.htm/sport/market/1.145000241
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: cook88=2321983680.31775.0000; AFF=100003; MPR=New/Not Qualify 1; MemberLevel=Gold; PLLC=Continuing; LTDCN=Lifetime Sm.50; intro_AfterLoginliu710927120=1; _ga=GA1.1.2089036263.1530015520; BIAB_HOW_TO_LINKS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_SHOW_TOOLTIPS=true; ASP.NET_SessionId=dza0vvpvif0u24otaxs45amd; isLogin=1; MC=liu710927120; BIAB_LANGUAGE=zh_CN; CultureInfo=zh-CN; warmSession=3DE098C9888E6CF718E47B553265A81EAB7AE22D367D48AE66C908873E971FBBCF6C9BC1E24EE45B35526AF622614A61A0FD06911D003E6C4909E0A046B8AB88D7F03D9F4A8BB62E4386EB96EFC9798F4EF3D75BD021B2F8C40CCB8F354471BF92E8E732E7678CA2D1C6F154E6C2D9CE; PlayerPreference=General; _gid=GA1.1.2054176041.1530501051; _pk_ses.4.1e6e=*; coldSession=0E2C9D497EE9ACEF3ED4E593019172FF83B1C44D33479692A7DF957EA8A0C65DCAB0049763F6FD141EB13815CEB5FB759CB26C580965EAC00C91890EF63594B01D24F9E8D98716E150CEE2C3658FC12A84734B3065C5983187437C5C92617DD6CD54E5A1D824B9AE04D020163E1A8314; CSRF-TOKEN=716409c29f5b771a1b196823c3f12c722c; BIAB_CUSTOMER=4CA4E82371A3CFBF548EFBB379EB136C1F10EA9F6A72D527957864FDE980E6E830FE4CE07F244AD4EBADE65F8826A0A767057248729D107C; _gat=1; _pk_id.4.1e6e=0a36474e797f8547.1530015520.4.1530514492.1530501051.
+{"1.145000241":[{"selectionId":1408,"side":"BACK","size":25,"price":1.53,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]}
+
+
+ **************************************************************************20180702 buy baxi *************************************************************************************************************
+ 
+ 4b46c8c54f6bd59fd6f91cd48bfd8e722d
+ 4b46c8c54f6bd59fd6f91cd48bfd8e722d
+ 
  
 1中 不清楚的 请求
  Request URL:https://www.fun173.com/signalr/poll?transport=longPolling&clientProtocol=1.5&connectionToken=XpfWvgaNqTuDIY03cf%2FEp5U3%2Bql1OAxp38J40cdclHy2NJe421H%2FvbhH4fXFWuN%2F34M1i2JiIYnO1jM39QoVIkv4tedQCrmhIPwOlh0M9RfZm7Rvq0%2F6e3nW5aM7Td6Ts62xn82kw5%2FZ5m%2BwO0zjmw%3D%3D&connectionData=%5B%7B%22name%22%3A%22chathub%22%7D%5D
@@ -64,7 +162,7 @@ messageId:s-0,156598A
 
 
 
-2  卖的 请求
+2  卖的 请求   data-selection-id
 
 
 Request URL:https://www.fun173.com/Exchange/customer/api/placeBets

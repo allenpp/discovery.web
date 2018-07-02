@@ -143,7 +143,8 @@ public class HttpClientUtils {
         HttpPost httpPost = null;
         String result = null;
         try{
-            httpClient = new SSLClient();
+            httpClient = new DefaultHttpClient();
+//            httpClient = new SSLClient();
             httpPost = new HttpPost(url);
             //设置参数
 //            List<NameValuePair> list = new ArrayList<NameValuePair>();
@@ -178,14 +179,16 @@ public class HttpClientUtils {
         HttpPost httpPost = null;
         String result = null;
         try{
-            httpClient = new SSLClient();
+//            httpClient = new SSLClient();
+            httpClient = new DefaultHttpClient();
             httpPost = new HttpPost(url);
-            httpPost.setHeader("Accept","*/*");
+            httpPost.setHeader("Accept","application/json, text/javascript, */*; q=0.01");
             httpPost.setHeader("Accept-Encoding","gzip, deflate, br");
             httpPost.setHeader("Accept-Language","zh-CN,zh;q=0.9");
             httpPost.setHeader("Connection","keep-alive");
-            httpPost.setHeader("Host","www.fun172.com");
-            httpPost.setHeader("cookie",cookies);
+            httpPost.setHeader("Host","135.84.237.201");
+            httpPost.setHeader("Cookie",cookies);
+            httpPost.setHeader("X-CSRF-TOKEN","4b46c8c54f6bd59fd6f91cd48bfd8e722d");
             httpPost.setHeader("User-Agent","Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 MicroMessenger/6.5.2.501 NetType/WIFI WindowsWechat QBCore/3.43.691.400 QQBrowser/9.0.2524.400");
             //设置参数
 //            List<NameValuePair> list = new ArrayList<NameValuePair>();
@@ -400,11 +403,11 @@ public class HttpClientUtils {
 
     private static void buyhttpsPost(){
 
-        String cookie = "intro_BeforeLogin=1; _ga=GA1.1.1802139949.1519308798; ASP.NET_SessionId=u02y5lhapoveboe3yxgpl0ia; CultureInfo=zh-CN; cook88=2204543168.20480.0000; PlayerPreference=General; _gid=GA1.1.1495271371.1520343780; _pk_ses.4.d4fa=*; comm100_guid2_100014005=HJNje3siikGOgagtNzFm2w; coldSession=99ADC7A3A6761AA3FB93CCBAD7E2A2D794C9CFDE7F18F731E961067ED7AA20F30E527D87017DCFFE9E41A6965004C1D6A806230ABE3F420B63BEE3FD9F9D266DFDCB982D0E94E4623091B7AD213094E057EC492CD42334F5A65AE60549914A1B498FDB770168645DD6F2F07A669F71AF; warmSession=088AD15D9CDE0C2B7016F853BE3F04C8154DC0A9011538DCBCB37F194592B815F4A41CC6625EBFB9A401F59FE2C65599B33A2E9147CD20C43909F6EA8C490623B9D95F9176DC98D7151A4E510D0AA9CCE656E3B7BAB4796DF2862B3FB45BBE3CAD18B42D5710768636638F1A4FF0AAB5; isLogin=1; AFF=100003; MPR=New/Not Qualify 2; PLLC=Continuing; LTDCN=Lifetime Sm.30; MC=liu710927120; intro_AfterLoginliu710927120=1; BIAB_LANGUAGE=zh_CN; BIAB_SHOW_TOOLTIPS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_LOGIN_POP_UP_SHOWN=true; BIAB_CUSTOMER=8E7FA9A0CD96A6EF0FC6DB9784AA0A9C5CE656099A7EC9B788DE5A4B47E60514E1C3A7CE0767F58B66BBFE372C77951A3FE3F7DFC7F1D848; _pk_id.4.d4fa=0a36474e797f8547.1519308798.4.1520345287.1520343780.; CSRF-TOKEN=40dcfa2cc10c58d7401e123bfe12fcd3df";
-        String url = "https://www.fun173.com/Exchange/customer/api/placeBets";
+        String cookie = "cook88=2321983680.31775.0000; AFF=100003; MPR=New/Not Qualify 1; MemberLevel=Gold; PLLC=Continuing; LTDCN=Lifetime Sm.50; intro_AfterLoginliu710927120=1; _ga=GA1.1.2089036263.1530015520; BIAB_HOW_TO_LINKS=true; i18next=zh_CN; BIAB_TZ=-480; BIAB_SHOW_TOOLTIPS=true; ASP.NET_SessionId=dza0vvpvif0u24otaxs45amd; isLogin=1; MC=liu710927120; BIAB_LANGUAGE=zh_CN; CultureInfo=zh-CN; warmSession=3DE098C9888E6CF718E47B553265A81EAB7AE22D367D48AE66C908873E971FBBCF6C9BC1E24EE45B35526AF622614A61A0FD06911D003E6C4909E0A046B8AB88D7F03D9F4A8BB62E4386EB96EFC9798F4EF3D75BD021B2F8C40CCB8F354471BF92E8E732E7678CA2D1C6F154E6C2D9CE; PlayerPreference=General; _gid=GA1.1.2054176041.1530501051; _pk_ses.4.1e6e=*; coldSession=0E2C9D497EE9ACEF3ED4E593019172FF83B1C44D33479692A7DF957EA8A0C65DCAB0049763F6FD141EB13815CEB5FB759CB26C580965EAC00C91890EF63594B01D24F9E8D98716E150CEE2C3658FC12A84734B3065C5983187437C5C92617DD6CD54E5A1D824B9AE04D020163E1A8314; CSRF-TOKEN=4b46c8c54f6bd59fd6f91cd48bfd8e722d; BIAB_CUSTOMER=A9C9EB726C86AEB0E482C9F0106EB16EDF9E3A9B085CF44A1FD6A947187D1298619E4F72A55DB6237959D9D8D5A3439DDC2C002AC4FECFA2; _gat=1; _pk_id.4.1e6e=0a36474e797f8547.1530015520.4.1530516417.1530501051.";
+        String url = "http://135.84.237.201/Exchange/customer/api/placeBets";
         Map<String,String> map = new HashMap<String,String>();
 
-        StringEntity stringEntity = new StringEntity("{\"1.140333033\":[{\"selectionId\":56323,\"side\":\"BACK\",\"size\":25,\"price\":2.82,\"persistenceType\":\"LAPSE\",\"handicap\":\"0\",\"eachWayData\":{}}]}","UTF-8");
+        StringEntity stringEntity = new StringEntity("{\"1.145000241\":[{\"selectionId\":1408,\"side\":\"BACK\",\"size\":25,\"price\":1.52,\"persistenceType\":\"LAPSE\",\"handicap\":\"0\",\"eachWayData\":{}}]}","UTF-8");
 
         try{
             String body = doHttpsPostWithCookie(url, null, "utf-8", cookie, stringEntity);

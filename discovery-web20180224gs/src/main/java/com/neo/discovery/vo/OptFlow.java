@@ -11,6 +11,7 @@ public class OptFlow {
 
     private long id;
     private Integer matchId;
+    private String hedgingId;
     private Float optPeiLv;
     private Float optAmount;
 
@@ -23,6 +24,8 @@ public class OptFlow {
     private String json;
     private String dufa;
     private String optType;
+    private String betId;
+    private String status;
 
     private Date beginTime;
     private Date endTime;
@@ -145,5 +148,31 @@ public class OptFlow {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+
+    public String getBetId() {
+        return betId;
+    }
+
+    public void setBetId(String betId) {
+        this.betId = betId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+    public String getHedgingId() {
+        return hedgingId;
+    }
+
+    public void setHedgingId(String hedgingId) {
+        this.hedgingId = hedgingId;
     }
 }

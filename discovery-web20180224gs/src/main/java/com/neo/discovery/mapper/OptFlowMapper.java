@@ -23,7 +23,9 @@ public interface OptFlowMapper {
 
     List<OptFlow> selectGroupByMatchId(OptFlow optFlow);
 
-    Integer updateOptFlowByMatchId(OptFlow optFlow);
+    Integer updateOptFlowByBetId(OptFlow optFlow);
+
+    Integer updateOptFlow(OptFlow optFlow);
 
 
 

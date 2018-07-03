@@ -349,6 +349,11 @@
    
  function doInsert(buyPeiLv,salePeiLv,homeAway,buyAmout,saleAmout,leagueMid,matchDateStr,dufa){
  
+  var urlId = $("#baseForm").attr("action");
+  if(null!=urlId&&urlId.length>0){
+	  var startIndex = urlId.lastIndexOf("/")+1;
+	    urlId = urlId.slice(startIndex);
+  }
    var temp = {
    buy_s1:buyPeiLv[0],buy_p1:buyPeiLv[2],buy_f1:buyPeiLv[1],buy_s1_amount:buyAmout[0],buy_p1_amount:buyAmout[2],buy_f1_amount:buyAmout[1],
    sale_s1:salePeiLv[0],sale_p1:salePeiLv[2],sale_f1:salePeiLv[1],sale_s1_amount:saleAmout[0],sale_p1_amount:saleAmout[2],sale_f1_amount:saleAmout[1],
@@ -363,7 +368,8 @@
    home:homeAway[0],away:homeAway[1],
    leagueName: leagueMid[0],matchId:leagueMid[1],
    matchDateStr:matchDateStr,
-   dufa:dufa
+   dufa:dufa,
+   urlId:urlId
    
    
    }
@@ -388,7 +394,8 @@
   
   
   
-  	    
+  var betId = "";	 
+  var hedgingId = "";  
  
    $.ajax({
                     url: "http://127.0.0.1/wave/isDoBet",
@@ -398,10 +405,34 @@
 					contentType:"application/json;",
                     data: json ,
                     success: function (data) {
-						if(null!=data){
+						var obj = eval('('+data+')')
+						if(null!=obj&&null!=obj.optType){
+							betId = obj.betId;
+							hedgingId = obj.hedgingId;
+							if(obj.optType=='confirmStatus'){
+								var status = doConfirmBetById(betId);
+								if(null!=status){
+									status = 1;
+									updateBet(betId,status,leagueMid[1]);
+								}
+							}else if(obj.optType=='nothing'){
+								
+							}else if(obj.optType=='buy_s'){
+								 dobet(temp,temp.buy_s1,25,'buy_s',hedgingId);
+							}else if(obj.optType=='buy_p'){
+								dobet(temp,temp.buy_p1,25,'buy_p',hedgingId);
+							}else if(obj.optType=='buy_f'){
+								dobet(temp,temp.buy_f1,25,'buy_f',hedgingId);
+							}else if(obj.optType=='sale_s'){
+								dobet(temp,temp.sale_s1,25,'sale_s',hedgingId);
+							}else if(obj.optType=='sale_p'){
+								dobet(temp,temp.sale_p1,25,'sale_p',hedgingId);
+							}else if(obj.optType=='sale_f'){
+								dobet(temp,temp.sale_f1,25,'sale_f',hedgingId);
+							} 
 							
 						}
-                        console.log("");
+                        console.log("isDobet "+obj);
                     },
                     error: function () {
                         console.log("提交失败！");
@@ -409,9 +440,91 @@
                 });
   
   
- 
+    
+    
  
  }
+ 
+ 
+ function doConfirmBetById(betId){
+	 
+	 if(null==betId) return "";
+	 
+	 //  {"660932":"PLACED"}  表示 挂起
+ 
+    //  {"660932":"CANCELLED"} 表示 成功
+	 
+	 if(true) return "1";
+	 var status = "";
+	  var crstoken =  getCookie('CSRF-TOKEN');
+	 var cookie = document.cookie;
+	   $.ajax({
+                    url: "http://135.84.237.201/Exchange/customer/api/betsStatuses?betIds="+betId,
+                    type: "GET",
+                    dataType:'json',
+					// jsonp: "callbackparam",   
+					contentType:"application/json;",
+					headers:{'X-CSRF-TOKEN':crstoken,'Cookie':cookie},
+                   // data: json ,
+					crossDomain: true,
+					async :false,
+					xhrFields: {
+						withCredentials: true
+					},
+                    success: function (data) {
+						if(null!=data&&null!=data.betId&&data.betId=='OK'){
+							status = 1;
+						}
+                        console.log(data);
+                    },
+                   function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(XMLHttpRequest);
+						console.log(errorThrown);
+						console.log(textStatus);
+                    },
+					 complete: function(aa,bb,cc) {
+						 console.log();
+                          //请求完成的处理
+                     },
+					  error: function(aa,bb,cc) {
+						   console.log();
+                          //请求完成的处理
+                     }
+                });
+				
+		return status;
+	 
+	 
+ }
+ 
+  function updateBet(betId,status,matchId){
+	 
+	 
+	 //  {"660932":"PLACED"}  表示 挂起
+ 
+    //  {"660932":"CANCELLED"} 表示 成功
+	 
+	 var temp = {"betId":betId,"status":status,"matchId":matchId};
+	  var json = JSON.stringify(temp);
+	       $.ajax({
+                    url: "http://127.0.0.1/wave/updateBet",
+                    type: "POST",
+                    datatype:"JSON",
+					method: 'POST',
+					contentType:"application/json;",
+                    data: json ,
+                    success: function (data) {
+                        console.log("");
+                    },
+                    error: function () {
+                        console.log("提交失败！");
+                    }
+                });
+	 
+	 
+ }
+ 
+ 
  
  
  function  doPlaceBet(){
@@ -440,6 +553,7 @@
 						withCredentials: true
 					},
                     success: function (data) {
+						if(null!=data)
                         console.log(data);
                     },
                    function(XMLHttpRequest, textStatus, errorThrown) {
@@ -527,12 +641,18 @@
  }
  
  
- function isShouldDobet(wave){
+ function dobet(wave,optPeiLv,optAmount,optType,hedgingId){
 	 
-	    var json = JSON.stringify(wave);
+	    
+		
+		var optFlow = {"matchId":wave.matchId,"optPeiLv":optPeiLv,"optAmount":optAmount,"home":wave.home,"away":wave.away,"leagueName":wave.leagueName,
+		               "optType":optType,"betId":wave.betId,"status":0,"matchDateStr":wave.matchDateStr,"hedgingId":hedgingId };
+					 
+	    var json = JSON.stringify(optFlow);
  
+         
    $.ajax({
-                    url: "http://127.0.0.1/wave/isDoBet",
+                    url: "http://127.0.0.1/wave/doBet",
                     type: "POST",
                     datatype:"JSON",
 					method: 'POST',
@@ -540,7 +660,7 @@
                     data: json ,
                     success: function (data) {
 						if(null!=data){
-							
+							return data;
 						}
                         console.log("");
                     },

@@ -5,10 +5,12 @@ import com.neo.discovery.mapper.WaveMapper;
 import com.neo.discovery.service.NoticeRule;
 import com.neo.discovery.service.OptFlowService;
 import com.neo.discovery.service.WaveService;
+import com.neo.discovery.util.OptStatus;
 import com.neo.discovery.util.ParseUtil;
 import com.neo.discovery.vo.OptFlow;
 import com.neo.discovery.vo.RaceTeam;
 import com.neo.discovery.vo.Wave;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -61,6 +63,10 @@ public class OptFlowServiceImpl implements OptFlowService {
         TransactionStatus status = txManager.getTransaction(def); // 获得事务状态
         Integer result = null;
         try{
+            if(StringUtils.isEmpty(optFlow.getHedgingId())){
+                String hedgingId = ParseUtil.parseDate2Str(new Date(),"yyyyMMddHHmmss");
+                optFlow.setHedgingId(hedgingId);
+            }
             optFlow.setCreateTime(new Date());
             result =  optFlowMapper.insert(optFlow);
             txManager.commit(status);
@@ -106,11 +112,18 @@ public class OptFlowServiceImpl implements OptFlowService {
         return list;
     }
 
-    public Integer updateOptFlowByMatchId(OptFlow optFlow) {
-        OptFlow result = optFlowMapper.selectOptFlow(optFlow);
-        optFlow.setId(result.getId());
-        optFlowMapper.updateOptFlowByMatchId(optFlow);
-        return null;
+    public Integer updateOptFlowByBetId(OptFlow optFlow) {
+        Integer result = 0;
+        OptFlow optFlowResult = optFlowMapper.selectOptFlow(optFlow);
+        if(null!=optFlowResult&&optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
+            optFlowMapper.updateOptFlow(optFlow);
+            result =   optFlowMapper.updateOptFlowByBetId(optFlow);
+        }else{
+            result =   optFlowMapper.updateOptFlowByBetId(optFlow);
+        }
+
+
+        return result;
     }
 
 

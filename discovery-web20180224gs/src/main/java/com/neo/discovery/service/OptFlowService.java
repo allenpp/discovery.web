@@ -18,7 +18,7 @@ public interface OptFlowService {
 
     List<OptFlow> selectGroupByMatchId(OptFlow optFlow);
 
-    Integer updateOptFlowByMatchId(OptFlow optFlow);
+    Integer updateOptFlowByBetId(OptFlow optFlow);
 
     OptFlow isBettingRecord(OptFlow optFlow);
 

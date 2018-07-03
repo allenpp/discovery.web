@@ -33,6 +33,16 @@ public class TongJiDto {
     private Date beginTime;
     private Date endTime;
 
+
+    private Float maxBuy_s;
+    private Float maxSale_s;
+    private Float maxBuy_p;
+    private Float maxSale_p;
+    private Float maxBuy_f;
+    private Float maxSale_f;
+
+
+
     public long getId() {
         return id;
     }
@@ -175,5 +185,53 @@ public class TongJiDto {
 
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
+    }
+
+    public Float getMaxBuy_s() {
+        return maxBuy_s;
+    }
+
+    public void setMaxBuy_s(Float maxBuy_s) {
+        this.maxBuy_s = maxBuy_s;
+    }
+
+    public Float getMaxSale_s() {
+        return maxSale_s;
+    }
+
+    public void setMaxSale_s(Float maxSale_s) {
+        this.maxSale_s = maxSale_s;
+    }
+
+    public Float getMaxBuy_p() {
+        return maxBuy_p;
+    }
+
+    public void setMaxBuy_p(Float maxBuy_p) {
+        this.maxBuy_p = maxBuy_p;
+    }
+
+    public Float getMaxSale_p() {
+        return maxSale_p;
+    }
+
+    public void setMaxSale_p(Float maxSale_p) {
+        this.maxSale_p = maxSale_p;
+    }
+
+    public Float getMaxBuy_f() {
+        return maxBuy_f;
+    }
+
+    public void setMaxBuy_f(Float maxBuy_f) {
+        this.maxBuy_f = maxBuy_f;
+    }
+
+    public Float getMaxSale_f() {
+        return maxSale_f;
+    }
+
+    public void setMaxSale_f(Float maxSale_f) {
+        this.maxSale_f = maxSale_f;
     }
 }

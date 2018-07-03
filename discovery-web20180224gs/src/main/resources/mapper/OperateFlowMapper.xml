@@ -17,7 +17,10 @@
         optType,
         optPeiLv,
         optAmount,
-        dufa
+        betId,
+        status,
+        dufa,
+        hedgingId
         )
         values (
           #{ matchId},
@@ -30,7 +33,10 @@
          #{optType},
          #{optPeiLv},
          #{optAmount},
-         #{dufa}
+         #{betId},
+         #{status},
+         #{dufa},
+         #{hedgingId}
         );
 
     </insert>
@@ -42,6 +48,12 @@
         select * from operate_flow where  1=1
         <if test="matchId != null ">
             and matchId =#{matchId}
+        </if>
+        <if test="betId != null ">
+            and betId =#{betId}
+        </if>
+        <if test="hedgingId != null ">
+            and hedgingId =#{hedgingId}
         </if>
 
         <if test="beginTime != null ">
@@ -69,17 +81,30 @@
     <select id="isBettingRecord"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
 
 
-        select  *   from operate_flow where ( status = '1' or status = '0'  ) order  by  id desc  limit 1
+        select  *   from operate_flow where   status =  #{status}  and matchid = #{matchId}  limit 1
 
     </select>
-    <update id="updateOperateFlowByMatchId"  parameterType = "com.neo.discovery.vo.OptFlow"  >
+    <update id="updateOptFlowByBetId"  parameterType = "com.neo.discovery.vo.OptFlow"  >
 
 
         update operate_flow   set
 
-         status  =     #{status},
+         status  =     #{status}
 
-         where  id = #{id}  and matchid = #{matchid}  and  status =''
+         where   matchid = #{matchId}  and  status =#{status}  and  betId = #{betId}
+
+    </update>
+    <update id="updateOptFlow"  parameterType = "com.neo.discovery.vo.OptFlow"  >
+
+
+        update operate_flow   set
+
+         status  =     #{status}
+
+         where   matchid = #{matchId}   and  betId = #{betId}
+        <if test="hedgingId != null ">
+            and hedgingId =#{hedgingId}
+        </if>
 
     </update>
 

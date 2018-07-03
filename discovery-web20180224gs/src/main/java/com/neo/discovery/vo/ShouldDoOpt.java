@@ -14,6 +14,9 @@ public class ShouldDoOpt {
     private Float optAmount;
 
     private String optType;
+    private String betId;
+    private String status;
+    private String hedgingId;
 
 
     public long getId() {
@@ -54,5 +57,31 @@ public class ShouldDoOpt {
 
     public void setOptType(String optType) {
         this.optType = optType;
+    }
+
+
+    public String getBetId() {
+        return betId;
+    }
+
+    public void setBetId(String betId) {
+        this.betId = betId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+    public String getHedgingId() {
+        return hedgingId;
+    }
+
+    public void setHedgingId(String hedgingId) {
+        this.hedgingId = hedgingId;
     }
 }

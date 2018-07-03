@@ -109,10 +109,10 @@ public class WaveServiceImpl implements WaveService {
         }
         return list;
     }
-    public List<Wave> selectMaxPeiLv(Wave wave) {
-        List<Wave>  list =  new ArrayList<Wave>();
+    public List<TongJiDto> selectMaxPeiLv(TongJiDto tongJiDto) {
+        List<TongJiDto>  list =  new ArrayList<TongJiDto>();
         try{
-            list =  waveMapper.selectMaxPeiLv(wave);
+            list =  waveMapper.selectMaxPeiLv(tongJiDto);
         }catch (Exception e){
             logger.error("",e);
         }

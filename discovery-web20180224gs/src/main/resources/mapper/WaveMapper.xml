@@ -74,7 +74,8 @@
        sale_s_p_amount,
        sale_s_f_amount,
        sale_p_f_amount,
-       dufa
+       dufa,
+       urlId
 
 
         )
@@ -148,7 +149,8 @@
          #{sale_s_p_amount},
          #{sale_s_f_amount},
          #{sale_p_f_amount},
-         #{dufa}
+         #{dufa},
+         #{urlId}
 
 
         );
@@ -226,7 +228,7 @@ where  1=1   and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW(
 
 
 select max(buy_s1) maxBuy_s ,max(sale_s1) maxSale_s,max(buy_P1)  maxBuy_p,max(sale_p1)  maxSale_p  ,max(buy_F1)  maxBuy_f ,max(sale_f1) maxSale_f from wave
-where  1=1   and   matchid = #{matchid} and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')  order  by createTime desc
+where  1=1   and   matchid = #{matchId} and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')  order  by createTime desc
 
 
     </select>

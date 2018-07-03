@@ -7,8 +7,10 @@ public enum OptStatus {
 
 
 
-    PLACE("2", "成交中"),//未支付等
-    OK("1", "成功");
+    PLACE("0", "成交中"),//未支付等
+    OK("1", "成功"),
+    CANCELLED("3", "取消成功"),
+    HEDGING("8", "DUICHONG");
 
 
 

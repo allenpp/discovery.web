@@ -29,7 +29,7 @@ public interface WaveMapper {
 
     List<TongJiDto> selectAvgByGroupTime(TongJiDto wave);
 
-    List<Wave> selectMaxPeiLv(Wave wave);
+    List<TongJiDto> selectMaxPeiLv(TongJiDto tongJiDto);
 
 
     List<TongJiDto> selectAvgByGroupTime();

@@ -12,7 +12,9 @@ public enum OptType {
     BUY_F("buy_f", "初始"),//未支付等
     SALE_S("sale_s", "初始"),//未支付等
     SALE_P("sale_p", "初始"),//未支付等
-    SALE_F("sale_f", "初始");//未支付等
+    SALE_F("sale_f", "初始"),//未支付等
+    CONFIRM_STATUS("confirmStatus", "初始"),//确认状态
+    NOTHING("nothing", "什么也不做");//未支付等
 
 
 

@@ -21,7 +21,7 @@ public interface WaveService {
     List<Wave> selectGroupByMatchId(Wave wave);
 
 
-    List<Wave> selectMaxPeiLv(Wave wave);
+    List<TongJiDto> selectMaxPeiLv(TongJiDto tongJiDto);
 
 
     Integer updateWaveByMatchId(Wave wave);

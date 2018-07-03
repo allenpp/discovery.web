@@ -4,12 +4,15 @@ package com.neo.discovery.web;
  * Created by liuyunpeng1 on 2017/9/14.
  */
 
+import com.alibaba.fastjson.JSON;
 import com.neo.discovery.service.OptFlowService;
 import com.neo.discovery.service.RaceTeamService;
 import com.neo.discovery.service.TongJiService;
 import com.neo.discovery.service.WaveService;
+import com.neo.discovery.util.OptStatus;
 import com.neo.discovery.util.OptType;
 import com.neo.discovery.vo.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,13 +95,13 @@ public class WaveController {
 
     @RequestMapping(value="/insert" ,method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView insert(HttpServletRequest request,@RequestBody Wave wave){
+    public String  insert(HttpServletRequest request,@RequestBody Wave wave){
 //    public ModelAndView insert(HttpServletRequest request ){
 //            int userId = Integer.parseInt(request.getParameter("id"));
 
 //        Wave wave = buildParam(request);
-        waveService.insert(wave);
-        return  null;
+        Integer success = waveService.insert(wave);
+        return  "{\"success\":"+success+"}";
     }
     @RequestMapping(value="/update" ,method = RequestMethod.POST)
     @ResponseBody
@@ -124,94 +127,139 @@ public class WaveController {
 
     @RequestMapping(value="/doBet" ,method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView doBet(HttpServletRequest request,@RequestBody OptFlow optFlow){
+    public String doBet(HttpServletRequest request,@RequestBody OptFlow optFlow){
         Integer success = 0;
+        if(StringUtils.isEmpty(optFlow.getBetId())){
+            optFlow.setBetId("123456");
+        }
         Integer temp   =  optFlowService.insert(optFlow);
         if(null!=temp){
             success = temp;
         }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("doBet", success);
-        return  modelAndView;
+        return  "{\"success\":"+success+"}";
+    }
+    @RequestMapping(value="/updateBet" ,method = RequestMethod.POST)
+    @ResponseBody
+    public String updateBet(HttpServletRequest request,@RequestBody OptFlow optFlow){
+        Integer success = 0;
+        Integer temp   =  optFlowService.updateOptFlowByBetId(optFlow);
+        if(null!=temp){
+            success = temp;
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("success", success);
+        return  "{\"success\":"+success+"}";
     }
 
     @RequestMapping(value="/isDoBet" ,method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView isDoBet(HttpServletRequest request,@RequestBody Wave wave){
-
-        OptFlow optFlow = optFlowService.isBettingRecord(null);
+    public String isDoBet(HttpServletRequest request,@RequestBody Wave wave){
         ShouldDoOpt shouldDoOpt = new ShouldDoOpt();
+        shouldDoOpt.setOptType(OptType.NOTHING.getOptType());
+        OptFlow optFlow =  null;
+        OptFlow status0 = new OptFlow();
+        status0.setMatchId(wave.getMatchId());
+        status0.setStatus(OptStatus.PLACE.getOptStatus());
+        optFlow = optFlowService.isBettingRecord(status0);
         if(null!=optFlow){
-            Wave max = null;
+            shouldDoOpt.setOptType(OptType.CONFIRM_STATUS.getOptType());
+            shouldDoOpt.setBetId(optFlow.getBetId());
+            return JSON.toJSONString(shouldDoOpt);
+        }
+
+        status0.setStatus(OptStatus.OK.getOptStatus());
+        optFlow = optFlowService.isBettingRecord(status0);
+        if(null==optFlow){
+            TongJiDto max = null;
             TongJiDto avgNow = null;
             TongJiDto avgLast = null;
-            List<Wave> list = waveService.selectMaxPeiLv(wave);
+            TongJiDto param = new TongJiDto();
+            param.setMatchId(wave.getMatchId());
+
+            List<TongJiDto> list = waveService.selectMaxPeiLv(param);
             if(null!=list && list.size()>0){
                 max = list.get(0);
             }
             TongJiDto tongJiDto = new TongJiDto();
             tongJiDto.setMatchId(wave.getMatchId());
             List<TongJiDto> avgList = waveService.selectAvgByGroupTime(tongJiDto);
-            avgNow = avgList.get(0);
-            avgLast = avgList.get(avgList.size()-1);
-
-
-            if(avgNow.getBuy_s1_avg()<avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()<avgLast.getSale_s1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 buy
-                shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
-            }else if(avgNow.getBuy_p1_avg()<avgLast.getBuy_p1_avg()&&avgNow.getSale_p1_avg()<avgLast.getSale_p1_avg()) {//现在的 buy 和 sale 都小于 一个小时前  则 先 buy
-                shouldDoOpt.setOptType(OptType.BUY_P.getOptType());
-            }else if(avgNow.getBuy_f1_avg()<avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()<avgLast.getSale_f1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 buy
-                shouldDoOpt.setOptType(OptType.BUY_F.getOptType());
-            } else if(avgNow.getBuy_s1_avg()>avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()>avgLast.getSale_s1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 sale
-                shouldDoOpt.setOptType(OptType.SALE_S.getOptType());
-            }else if(avgNow.getBuy_p1_avg()>avgLast.getBuy_p1_avg()&&avgNow.getSale_p1_avg()>avgLast.getSale_p1_avg()) {//现在的 buy 和 sale 都小于 一个小时前  则 先 sale
-                shouldDoOpt.setOptType(OptType.SALE_P.getOptType());
-            }else if(avgNow.getBuy_f1_avg()>avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()>avgLast.getSale_f1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 sale
-                shouldDoOpt.setOptType(OptType.SALE_F.getOptType());
-            }
-        }else{
-            String haveOptType =  optFlow.getOptType();
-            float haveOptPeiLv = optFlow.getOptPeiLv();
-            if(haveOptType.equals(OptType.BUY_S)){
-                if(wave.getSale_s1()-0.1<haveOptPeiLv){
-                    logger.info("should sale {},{}",wave.getSale_s1());
+            if(null!=avgList&&avgList.size()>5){
+                avgNow = avgList.get(0);
+                avgLast = avgList.get(avgList.size()-1);
+                if(avgNow.getBuy_s1_avg()<avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()<avgLast.getSale_s1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 buy
+                    shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
+                }else if(avgNow.getBuy_p1_avg()<avgLast.getBuy_p1_avg()&&avgNow.getSale_p1_avg()<avgLast.getSale_p1_avg()) {//现在的 buy 和 sale 都小于 一个小时前  则 先 buy
+                    shouldDoOpt.setOptType(OptType.BUY_P.getOptType());
+                }else if(avgNow.getBuy_f1_avg()<avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()<avgLast.getSale_f1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 buy
+                    shouldDoOpt.setOptType(OptType.BUY_F.getOptType());
+                } else if(avgNow.getBuy_s1_avg()>avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()>avgLast.getSale_s1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 sale
                     shouldDoOpt.setOptType(OptType.SALE_S.getOptType());
-                }
-            }else if(haveOptType.equals(OptType.BUY_P)){
-                if(wave.getSale_p1()-0.1<haveOptPeiLv){
-                    logger.info("should sale {},{}",wave.getSale_s1());
+                }else if(avgNow.getBuy_p1_avg()>avgLast.getBuy_p1_avg()&&avgNow.getSale_p1_avg()>avgLast.getSale_p1_avg()) {//现在的 buy 和 sale 都小于 一个小时前  则 先 sale
                     shouldDoOpt.setOptType(OptType.SALE_P.getOptType());
-                }
-            }else if(haveOptType.equals(OptType.BUY_F)){
-                if(wave.getSale_f1()-0.1<haveOptPeiLv){
-                    logger.info("should sale {},{}",wave.getSale_s1());
+                }else if(avgNow.getBuy_f1_avg()>avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()>avgLast.getSale_f1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 sale
                     shouldDoOpt.setOptType(OptType.SALE_F.getOptType());
                 }
-            }else if(haveOptType.equals(OptType.SALE_S)){
-                if(wave.getBuy_s1()-0.1>haveOptPeiLv){
-                    logger.info("should buy {},{}",wave.getSale_s1());
-                    shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
-                }
-            }else if(haveOptType.equals(OptType.SALE_P)){
-                if(wave.getBuy_p1()-0.1>haveOptPeiLv){
-                    logger.info("should buy {},{}",wave.getSale_s1());
-                    shouldDoOpt.setOptType(OptType.BUY_P.getOptType());
-                }
-            }else if(haveOptType.equals(OptType.SALE_F)){
-                if(wave.getBuy_f1() -0.1>haveOptPeiLv){
-                    logger.info("should buy {},{}",wave.getSale_s1());
-                    shouldDoOpt.setOptType(OptType.BUY_F.getOptType());
-                }
             }
+        }else {
+            shouldDoOpt.setBetId(optFlow.getBetId());
+            if(optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
 
+                String haveOptType =  optFlow.getOptType();
+                float haveOptPeiLv = optFlow.getOptPeiLv();
+                if(haveOptType.equals(OptType.BUY_S.getOptType())){
+                    if(wave.getSale_s1()<haveOptPeiLv-0.1){
+                        logger.info("should sale {},{}",wave.getSale_s1());
+                        shouldDoOpt.setOptType(OptType.SALE_S.getOptType());
+                        shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
+                        shouldDoOpt.setHedgingId(optFlow.getId()+"");
+                    }
+                }else if(haveOptType.equals(OptType.BUY_P.getOptType())){
+                    if(wave.getSale_p1()<haveOptPeiLv-0.1){
+                        logger.info("should sale {},{}",wave.getSale_s1());
+                        shouldDoOpt.setOptType(OptType.SALE_P.getOptType());
+                        shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
+                        shouldDoOpt.setHedgingId(optFlow.getId() + "");
+                    }
+                }else if(haveOptType.equals(OptType.BUY_F.getOptType())){
+                    if(wave.getSale_f1()<haveOptPeiLv-0.1){
+                        logger.info("should sale {},{}",wave.getSale_s1());
+                        shouldDoOpt.setOptType(OptType.SALE_F.getOptType());
+                        shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
+                        shouldDoOpt.setHedgingId(optFlow.getId() + "");
+                    }
+                }else if(haveOptType.equals(OptType.SALE_S.getOptType())){
+                    if(wave.getBuy_s1()-0.1>haveOptPeiLv){
+                        logger.info("should buy {},{}",wave.getSale_s1());
+                        shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
+                        shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
+                        shouldDoOpt.setHedgingId(optFlow.getId() + "");
+                    }
+                }else if(haveOptType.equals(OptType.SALE_P.getOptType())){
+                    if(wave.getBuy_p1()-0.1>haveOptPeiLv){
+                        logger.info("should buy {},{}",wave.getSale_s1());
+                        shouldDoOpt.setOptType(OptType.BUY_P.getOptType());
+                        shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
+                        shouldDoOpt.setHedgingId(optFlow.getId() + "");
+                    }
+                }else if(haveOptType.equals(OptType.SALE_F.getOptType())){
+                    if(wave.getBuy_f1() +1>haveOptPeiLv){
+                        logger.info("should buy {},{}",wave.getSale_s1());
+                        shouldDoOpt.setOptType(OptType.BUY_F.getOptType());
+                        shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
+                        shouldDoOpt.setHedgingId(optFlow.getId() + "");
+                    }
+                }
+            }else{
+                shouldDoOpt.setOptType(OptType.CONFIRM_STATUS.getOptType());
+            }
 
 
 
         }
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("shouldDoOpt", shouldDoOpt);
 
-        return  modelAndView;
+        return JSON.toJSONString(shouldDoOpt);
     }
 }

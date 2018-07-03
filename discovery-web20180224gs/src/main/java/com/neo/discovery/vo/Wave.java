@@ -11,6 +11,7 @@ public class Wave {
 
     private long id;
     private Integer matchId;
+    private String urlId;
     private Float buy_s1;
     private Float buy_p1;
     private Float buy_f1;
@@ -586,5 +587,13 @@ public class Wave {
 
     public void setDufa(String dufa) {
         this.dufa = dufa;
+    }
+
+    public String getUrlId() {
+        return urlId;
+    }
+
+    public void setUrlId(String urlId) {
+        this.urlId = urlId;
     }
 }

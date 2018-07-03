@@ -72,6 +72,27 @@
         select  matchid,home,away  from operate_flow where matchid is not null  and home is not null  group by matchid,home,away
 
     </select>
+    <select id="selectOptFlow"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
+
+
+        select  *   from operate_flow   where 1=1
+        <if test="matchId != null ">
+           and matchId =#{matchId}
+         </if>
+        <if test="betId != null ">
+            and betId =#{betId}
+        </if>
+        <if test="hedgingId != null ">
+            and hedgingId =#{hedgingId}
+        </if>
+        <if test="status != null ">
+            and status =#{status}
+        </if>
+        <if test="id != null ">
+            and id =#{id}
+        </if>
+
+    </select>
     <select id="selectFirstRecord"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
 
 
@@ -91,20 +112,30 @@
 
          status  =     #{status}
 
-         where   matchid = #{matchId}  and  status =#{status}  and  betId = #{betId}
+         where   matchid = #{matchId}    and  betId = #{betId}
 
     </update>
     <update id="updateOptFlow"  parameterType = "com.neo.discovery.vo.OptFlow"  >
-
-
         update operate_flow   set
-
          status  =     #{status}
+         where  1=1   and  betId = #{betId}
+        <if test="matchId != null ">
+            and  matchid = #{matchId}
+        </if>
 
-         where   matchid = #{matchId}   and  betId = #{betId}
+
         <if test="hedgingId != null ">
             and hedgingId =#{hedgingId}
         </if>
+        <if test="id != null ">
+            and id =#{id}
+        </if>
+    </update>
+    <update id="updateOptFlowById"  parameterType = "com.neo.discovery.vo.OptFlow"  >
+        update operate_flow   set
+         status  =     #{status}
+         where  1=1
+            and id =#{id}
 
     </update>
 

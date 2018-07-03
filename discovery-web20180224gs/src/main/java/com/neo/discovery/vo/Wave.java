@@ -9,7 +9,7 @@ import java.util.Date;
 public class Wave {
 
 
-    private long id;
+    private Long id;
     private Integer matchId;
     private String urlId;
     private Float buy_s1;
@@ -139,11 +139,11 @@ public class Wave {
         this.sale_f1 = sale_f1;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

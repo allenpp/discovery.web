@@ -658,6 +658,11 @@
 					method: 'POST',
 					contentType:"application/json;",
                     data: json ,
+					crossDomain: true,
+					async : false,
+					xhrFields: {
+						withCredentials: true
+					},
                     success: function (data) {
 						if(null!=data){
 							return data;

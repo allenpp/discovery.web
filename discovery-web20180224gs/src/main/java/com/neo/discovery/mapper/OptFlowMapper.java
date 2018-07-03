@@ -26,6 +26,7 @@ public interface OptFlowMapper {
     Integer updateOptFlowByBetId(OptFlow optFlow);
 
     Integer updateOptFlow(OptFlow optFlow);
+    Integer updateOptFlowById(OptFlow optFlow);
 
 
 

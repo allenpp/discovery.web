@@ -63,9 +63,19 @@ public class OptFlowServiceImpl implements OptFlowService {
         TransactionStatus status = txManager.getTransaction(def); // 获得事务状态
         Integer result = null;
         try{
+
+            OptFlow param = new OptFlow();
+            param.setMatchId(optFlow.getMatchId());
+            param.setBetId(optFlow.getBetId());
+            param.setStatus(OptStatus.PLACE.getOptStatus());
+            OptFlow place = optFlowMapper.selectOptFlow(param);
+            if(null!=place){
+                return 0;
+            }
+
             if(StringUtils.isEmpty(optFlow.getHedgingId())){
-                String hedgingId = ParseUtil.parseDate2Str(new Date(),"yyyyMMddHHmmss");
-                optFlow.setHedgingId(hedgingId);
+//                String hedgingId = ParseUtil.parseDate2Str(new Date(),"yyyyMMddHHmmss");
+//                optFlow.setHedgingId(hedgingId);
             }
             optFlow.setCreateTime(new Date());
             result =  optFlowMapper.insert(optFlow);
@@ -114,10 +124,17 @@ public class OptFlowServiceImpl implements OptFlowService {
 
     public Integer updateOptFlowByBetId(OptFlow optFlow) {
         Integer result = 0;
-        OptFlow optFlowResult = optFlowMapper.selectOptFlow(optFlow);
-        if(null!=optFlowResult&&optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
+        OptFlow param = new OptFlow();
+        param.setBetId(optFlow.getBetId());
+        param.setMatchId(optFlow.getMatchId());
+        OptFlow optFlowResult = optFlowMapper.selectOptFlow(param);
+        if(null!=optFlowResult&&null!=optFlowResult.getHedgingId()&&optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
+            optFlow.setStatus(OptStatus.HEDGING.getOptStatus());
             optFlowMapper.updateOptFlow(optFlow);
-            result =   optFlowMapper.updateOptFlowByBetId(optFlow);
+            OptFlow hedging = new OptFlow();
+            hedging.setStatus(OptStatus.HEDGING.getOptStatus());
+            hedging.setId(Long.parseLong(optFlowResult.getHedgingId()));
+            result =   optFlowMapper.updateOptFlowById(hedging);
         }else{
             result =   optFlowMapper.updateOptFlowByBetId(optFlow);
         }

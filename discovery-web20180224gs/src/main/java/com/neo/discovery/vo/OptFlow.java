@@ -9,7 +9,7 @@ import java.util.Date;
 public class OptFlow {
 
 
-    private long id;
+    private Long id;
     private Integer matchId;
     private String hedgingId;
     private Float optPeiLv;
@@ -30,11 +30,11 @@ public class OptFlow {
     private Date beginTime;
     private Date endTime;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

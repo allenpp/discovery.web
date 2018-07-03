@@ -220,7 +220,7 @@ group  by  date_format(FLOOR(createTime/300)*300, '%H:%i')  -->
 
 
 select date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i') timeZone,avg(buy_s1) buy_s1_avg ,avg(sale_s1) sale_s1_avg,avg(buy_P1)  buy_p1_avg,avg(sale_p1)  sale_p1_avg  ,avg(buy_F1)  buy_f1_avg ,avg(sale_f1) sale_f1_avg from wave
-where  1=1   and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')  order  by createTime desc
+where  1=1 and matchId = #{matchId}  and  ( createTime BETWEEN  DATE_SUB(now(),INTERVAL 1 hour) AND NOW())            group  by  date_format(FLOOR(createTime/300)*300, '%Y-%m-%d %H:%i')  order  by createTime desc
 
 
     </select>

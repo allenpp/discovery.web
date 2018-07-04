@@ -77,6 +77,11 @@ public class WaveServiceImpl implements WaveService {
         Integer result = null;
         try{
             wave.setCreateTime(new Date());
+            //1.145046582?id=6482.628198221865
+            if(wave.getUrlId().indexOf("?")>0){
+                String temp = wave.getUrlId().substring(0,wave.getUrlId().indexOf("?"));
+                wave.setUrlId(temp);
+            }
             result =  waveMapper.insert(wave);
             txManager.commit(status);
         }catch (Exception e){

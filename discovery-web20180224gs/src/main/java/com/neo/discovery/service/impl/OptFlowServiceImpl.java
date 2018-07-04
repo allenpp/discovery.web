@@ -66,8 +66,8 @@ public class OptFlowServiceImpl implements OptFlowService {
 
             OptFlow param = new OptFlow();
             param.setMatchId(optFlow.getMatchId());
-            param.setBetId(optFlow.getBetId());
-            param.setStatus(OptStatus.PLACE.getOptStatus());
+            param.setHedgingId(optFlow.getHedgingId());
+//            param.setStatus(OptStatus.PLACE.getOptStatus());
             OptFlow place = optFlowMapper.selectOptFlow(param);
             if(null!=place){
                 return 0;
@@ -122,21 +122,48 @@ public class OptFlowServiceImpl implements OptFlowService {
         return list;
     }
 
-    public Integer updateOptFlowByBetId(OptFlow optFlow) {
+    /**
+     * 更新 一个hedging的状态
+     * @param optFlow
+     * @return
+     */
+    public Integer updateOneHedgingOptFlow(OptFlow optFlow) {
         Integer result = 0;
         OptFlow param = new OptFlow();
         param.setBetId(optFlow.getBetId());
         param.setMatchId(optFlow.getMatchId());
-        OptFlow optFlowResult = optFlowMapper.selectOptFlow(param);
-        if(null!=optFlowResult&&null!=optFlowResult.getHedgingId()&&optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
-            optFlow.setStatus(OptStatus.HEDGING.getOptStatus());
-            optFlowMapper.updateOptFlow(optFlow);
+        OptFlow optFlowResult = optFlowMapper.selectOptFlow(param);//第二个bet的信息  根据 betId查询出来 该bet的状态信息应该为 0
+        OptFlow bet1 = new OptFlow();
+        bet1.setId(Long.parseLong(optFlow.getHedgingId()));
+        OptFlow hedgingBet = optFlowMapper.selectOptFlow(bet1);//根据第二个bet的 hedgingId查询出第一个 bet的信息  该bet的 状态应该为 1
+        if(null!=optFlowResult&&null!=optFlow.getHedgingId()&&hedgingBet.getStatus().equals(OptStatus.OK.getOptStatus())&&null!=optFlowResult&&optFlowResult.getStatus().equals(OptStatus.PLACE.getOptStatus())&&optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
             OptFlow hedging = new OptFlow();
             hedging.setStatus(OptStatus.HEDGING.getOptStatus());
             hedging.setId(Long.parseLong(optFlowResult.getHedgingId()));
-            result =   optFlowMapper.updateOptFlowById(hedging);
+            hedging.setBetId(optFlow.getBetId());
+            hedging.setMatchId(optFlow.getMatchId());
+            result =   optFlowMapper.updateOneHedgingOptFlow(hedging);
+        }
+        return result;
+    }
+
+    /**
+     * 正常更新 一个bet的状态
+     * @param optFlow
+     * @return
+     */
+    public Integer updateOptFlowByBetId(OptFlow optFlow) {
+        Integer result = 0;
+        if(null!=optFlow&&StringUtils.isNotBlank(optFlow.getHedgingId())){//更新 hedging
+            result = updateOneHedgingOptFlow(optFlow);
         }else{
-            result =   optFlowMapper.updateOptFlowByBetId(optFlow);
+            OptFlow param = new OptFlow();
+            param.setBetId(optFlow.getBetId());
+            param.setMatchId(optFlow.getMatchId());
+            OptFlow optFlowResult = optFlowMapper.selectOptFlow(param);
+            if(null!=optFlowResult&&optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
+                result =   optFlowMapper.updateOptFlowByBetId(optFlow);
+            }
         }
 
 

@@ -413,7 +413,7 @@
 								var status = doConfirmBetById(betId);
 								if(null!=status){
 									status = 1;
-									updateBet(betId,status,leagueMid[1]);
+									updateBet(betId,status,leagueMid[1],hedgingId);
 								}
 							}else if(obj.optType=='nothing'){
 								
@@ -497,14 +497,14 @@
 	 
  }
  
-  function updateBet(betId,status,matchId){
+  function updateBet(betId,status,matchId,hedgingId){
 	 
 	 
 	 //  {"660932":"PLACED"}  表示 挂起
  
     //  {"660932":"CANCELLED"} 表示 成功
 	 
-	 var temp = {"betId":betId,"status":status,"matchId":matchId};
+	 var temp = {"betId":betId,"status":status,"matchId":matchId,"hedgingId":hedgingId};
 	  var json = JSON.stringify(temp);
 	       $.ajax({
                     url: "http://127.0.0.1/wave/updateBet",
@@ -643,10 +643,10 @@
  
  function dobet(wave,optPeiLv,optAmount,optType,hedgingId){
 	 
-	    
+	    var currentTime  = new Date().getTime();  
 		
 		var optFlow = {"matchId":wave.matchId,"optPeiLv":optPeiLv,"optAmount":optAmount,"home":wave.home,"away":wave.away,"leagueName":wave.leagueName,
-		               "optType":optType,"betId":wave.betId,"status":0,"matchDateStr":wave.matchDateStr,"hedgingId":hedgingId };
+		               "optType":optType,"betId":currentTime,"status":0,"matchDateStr":wave.matchDateStr,"hedgingId":hedgingId };
 					 
 	    var json = JSON.stringify(optFlow);
  

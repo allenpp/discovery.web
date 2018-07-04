@@ -129,9 +129,6 @@ public class WaveController {
     @ResponseBody
     public String doBet(HttpServletRequest request,@RequestBody OptFlow optFlow){
         Integer success = 0;
-        if(StringUtils.isEmpty(optFlow.getBetId())){
-            optFlow.setBetId("123456");
-        }
         Integer temp   =  optFlowService.insert(optFlow);
         if(null!=temp){
             success = temp;
@@ -166,6 +163,7 @@ public class WaveController {
         if(null!=optFlow){
             shouldDoOpt.setOptType(OptType.CONFIRM_STATUS.getOptType());
             shouldDoOpt.setBetId(optFlow.getBetId());
+            shouldDoOpt.setHedgingId(optFlow.getHedgingId());
             return JSON.toJSONString(shouldDoOpt);
         }
 
@@ -185,7 +183,7 @@ public class WaveController {
             TongJiDto tongJiDto = new TongJiDto();
             tongJiDto.setMatchId(wave.getMatchId());
             List<TongJiDto> avgList = waveService.selectAvgByGroupTime(tongJiDto);
-            if(null!=avgList&&avgList.size()>5){
+            if(null!=avgList&&avgList.size()>=3){
                 avgNow = avgList.get(0);
                 avgLast = avgList.get(avgList.size()-1);
                 if(avgNow.getBuy_s1_avg()<avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()<avgLast.getSale_s1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 buy
@@ -230,7 +228,7 @@ public class WaveController {
                         shouldDoOpt.setHedgingId(optFlow.getId() + "");
                     }
                 }else if(haveOptType.equals(OptType.SALE_S.getOptType())){
-                    if(wave.getBuy_s1()-0.1>haveOptPeiLv){
+                    if(wave.getBuy_s1()+1>haveOptPeiLv){//这里注意 修改回去***********************************************************
                         logger.info("should buy {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
@@ -244,7 +242,7 @@ public class WaveController {
                         shouldDoOpt.setHedgingId(optFlow.getId() + "");
                     }
                 }else if(haveOptType.equals(OptType.SALE_F.getOptType())){
-                    if(wave.getBuy_f1() +1>haveOptPeiLv){
+                    if(wave.getBuy_f1() -0.11>haveOptPeiLv){
                         logger.info("should buy {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.BUY_F.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());

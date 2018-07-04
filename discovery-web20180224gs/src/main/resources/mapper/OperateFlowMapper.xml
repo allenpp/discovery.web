@@ -62,6 +62,9 @@
         <if test="endTime != null ">
             and  #{endTime} >createTime
         </if>
+        <if test="id != null ">
+            and id =  #{id}
+        </if>
 
         limit 10000
 
@@ -105,6 +108,16 @@
         select  *   from operate_flow where   status =  #{status}  and matchid = #{matchId}  limit 1
 
     </select>
+    <update id="updateOneHedgingOptFlow"  parameterType = "com.neo.discovery.vo.OptFlow"  >
+
+
+        update operate_flow   set
+
+         status  =     #{status}
+
+         where   matchid = #{matchId}    and   ( betId = #{betId}  or  id = #{id} )
+
+    </update>
     <update id="updateOptFlowByBetId"  parameterType = "com.neo.discovery.vo.OptFlow"  >
 
 

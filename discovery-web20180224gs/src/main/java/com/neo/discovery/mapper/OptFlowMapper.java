@@ -27,6 +27,7 @@ public interface OptFlowMapper {
 
     Integer updateOptFlow(OptFlow optFlow);
     Integer updateOptFlowById(OptFlow optFlow);
+    Integer updateOneHedgingOptFlow(OptFlow optFlow);
 
 
 

@@ -152,7 +152,7 @@
 	var dufa = $(".biab_market-name.biab_hidden-xs").text();
 	if(dufa=='独赢盘'){
 		doInsert(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr,dufa);
-		doPlaceBet(hasPlaceBet);
+		 doPlaceBet('buy_s',25,2.5)
 	}else if(dufa=='双重机会'){
 		doInsertShuangChongJiHui(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr,dufa);
 	}
@@ -527,13 +527,40 @@
  
  
  
- function  doPlaceBet(){
+ function  doPlaceBet(optType,size,price){
+ 
+     var returnArr = new Array();
+	 var selectionId = '';
+	 var betId = '';
+	 var  betStatus = '';
+	 if(optType.indexOf('buy')==0){
+	     side='BACK'
+	 }else if(optType.indexOf('sale')==0){
+	     side = 'LAY';
+	 }
+	 if(optType.indexOf('_s')>0){
+	     selectionId=$(".biab_market-selections.js-market-selections").children("div:eq(0)").attr('data-selection-id');
+	 }else if(optType.indexOf('_p')>0){
+	     selectionId = $(".biab_market-selections.js-market-selections").children("div:eq(2)").attr('data-selection-id');
+	 }else if(optType.indexOf('_f')>0){
+	     selectionId = $(".biab_market-selections.js-market-selections").children("div:eq(1)").attr('data-selection-id');
+	 }
 	 
 	 var crstoken =  getCookie('CSRF-TOKEN');
 	 var cookie = document.cookie;
+ 
+    var urlId = $("#baseForm").attr("action");
+	  if(null!=urlId&&urlId.length>0){
+		  var startIndex = urlId.lastIndexOf("/")+1;
+			urlId = urlId.slice(startIndex)+'';
+	  }
+	  var temp ={};
+	  
+      temp[urlId] =   [{"selectionId":selectionId,"side":side,"size":size,"price":price,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]
+	     	   
 	 if(false){
 		 
-	    var temp =   {"1.145000241":[{"selectionId":1408,"side":"BACK","size":25,"price":1.52,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]}
+	   //var temp =   {"1.145000241":[{"selectionId":1408,"side":"BACK","size":25,"price":1.52,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]}
  
 	    var json = JSON.stringify(temp);
 		
@@ -553,7 +580,15 @@
 						withCredentials: true
 					},
                     success: function (data) {
-						if(null!=data)
+						if(null!=data){
+						   var value = data[urlId];
+						   if(null!=value&&value.status=='OK'){
+						        betId = value.offerIds[0];
+								returnArr.push(betId);
+						   }
+						     
+						    
+						}
                         console.log(data);
                     },
                    function(XMLHttpRequest, textStatus, errorThrown) {
@@ -573,7 +608,7 @@
 				
 				
 		   $.ajax({
-                    url: "http://135.84.237.201/Exchange/customer/api/betsStatuses?betIds=660932",
+                    url: "http://135.84.237.201/Exchange/customer/api/betsStatuses?betIds="+betId,
                     type: "GET",
                     dataType:'json',
 					// jsonp: "callbackparam",   
@@ -586,6 +621,10 @@
 						withCredentials: true
 					},
                     success: function (data) {
+					
+					    betStatus = data[betId];
+						returnArr.push(betStatus);
+					
                         console.log(data);
                     },
                    function(XMLHttpRequest, textStatus, errorThrown) {
@@ -602,54 +641,40 @@
                           //请求完成的处理
                      }
                 });
-				
-				
-					   $.ajax({
-                    url: "http://135.84.237.201/Exchange/customer/api/account/balance",
-                    type: "GET",
-                    dataType:'json',
-					// jsonp: "callbackparam",   
-					contentType:"application/json;",
-					headers:{'X-CSRF-TOKEN':crstoken,'Cookie':cookie},
-                   // data: json ,
-					crossDomain: true,
-					async :false,
-					xhrFields: {
-						withCredentials: true
-					},
-                    success: function (data) {
-                        console.log("");
-                    },
-                   function(XMLHttpRequest, textStatus, errorThrown) {
-						console.log(XMLHttpRequest);
-						console.log(errorThrown);
-						console.log(textStatus);
-                    },
-					 complete: function(aa,bb,cc) {
-						 console.log();
-                          //请求完成的处理
-                     },
-					  error: function(aa,bb,cc) {
-						   console.log();
-                          //请求完成的处理
-                     }
-                });
-		 
+	 
 	 }
  
+     return  returnArr;
 	 
  }
  
  
  function dobet(wave,optPeiLv,optAmount,optType,hedgingId){
 	 
+	     var betId = '';
+		 var status = '';
+	 
+	    var arr = doPlaceBet(optType,optAmount,optPeiLv);
+		if(null!=arr&&arr.length==2){
+		   betId = arr[0];
+		   status = arr[1];
+		   if(status=='PLACED'){//待匹配
+		       status =0;
+		   }else if(status=='CANCEL'){
+		       status =3;
+		   }else if(status=='OK'){
+		       status =1;
+		   }
+		}
+	 
 	    var currentTime  = new Date().getTime();  
 		
 		var optFlow = {"matchId":wave.matchId,"optPeiLv":optPeiLv,"optAmount":optAmount,"home":wave.home,"away":wave.away,"leagueName":wave.leagueName,
-		               "optType":optType,"betId":currentTime,"status":0,"matchDateStr":wave.matchDateStr,"hedgingId":hedgingId };
+		               "optType":optType,"betId":betId,"status":status,"matchDateStr":wave.matchDateStr,"hedgingId":hedgingId };
 					 
 	    var json = JSON.stringify(optFlow);
  
+     
          
    $.ajax({
                     url: "http://127.0.0.1/wave/doBet",

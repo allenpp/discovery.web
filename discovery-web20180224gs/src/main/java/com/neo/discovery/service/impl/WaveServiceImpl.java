@@ -145,8 +145,8 @@ public class WaveServiceImpl implements WaveService {
     public void doNotice(Wave wave){
 
         if(null!=noticeList&&noticeList.size()<1){
-            noticeList.add(noticeSale);
-            noticeList.add(noticeBuy);
+//            noticeList.add(noticeSale);
+//            noticeList.add(noticeBuy);
             noticeList.add(noticeMatchDate);
             noticeList.add(noticeChange);
         }

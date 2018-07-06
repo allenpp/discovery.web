@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.slf4j.Logger;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
@@ -19,7 +20,7 @@ public class PropertiesFileUtils {
 
     public  static String filePath = "C:\\Users\\Administrator\\Desktop\\金山\\matchBuy.txt";
 
-
+    private static Logger logger = org.slf4j.LoggerFactory.getLogger(PropertiesFileUtils.class);
     /**
      *
      * @Title: printAllProperty
@@ -147,7 +148,7 @@ public class PropertiesFileUtils {
 //            prop.load(InputStream);
 //            printAllProperty(prop);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("load file fail ,{}", filePath);
         }
         return prop;
     }

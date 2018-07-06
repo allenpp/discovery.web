@@ -228,7 +228,7 @@ public class WaveController {
                         shouldDoOpt.setHedgingId(optFlow.getId() + "");
                     }
                 }else if(haveOptType.equals(OptType.SALE_S.getOptType())){
-                    if(wave.getBuy_s1()+1>haveOptPeiLv){//这里注意 修改回去***********************************************************
+                    if(wave.getBuy_s1()-0.1>haveOptPeiLv){//这里注意 修改回去***********************************************************
                         logger.info("should buy {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());

@@ -152,7 +152,7 @@
 	var dufa = $(".biab_market-name.biab_hidden-xs").text();
 	if(dufa=='独赢盘'){
 		doInsert(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr,dufa);
-		 doPlaceBet('buy_s',25,2.5)
+		// doPlaceBet('buy_s',25,2.5)
 	}else if(dufa=='双重机会'){
 		doInsertShuangChongJiHui(arrPeiLv,arrSalePeiLv,home_away.split(" v "),arrAmount,arrSaleAmount,leagueMid,matchDateStr,dufa);
 	}
@@ -412,7 +412,7 @@
 							if(obj.optType=='confirmStatus'){
 								var status = doConfirmBetById(betId);
 								if(null!=status){
-									status = 1;
+									 
 									updateBet(betId,status,leagueMid[1],hedgingId);
 								}
 							}else if(obj.optType=='nothing'){
@@ -454,8 +454,8 @@
  
     //  {"660932":"CANCELLED"} 表示 成功
 	 
-	 if(true) return "1";
-	 var status = "";
+	 if(false) return "1";
+	 var status = "0";
 	  var crstoken =  getCookie('CSRF-TOKEN');
 	 var cookie = document.cookie;
 	   $.ajax({
@@ -472,8 +472,8 @@
 						withCredentials: true
 					},
                     success: function (data) {
-						if(null!=data&&null!=data.betId&&data.betId=='OK'){
-							status = 1;
+						if(null!=data ){
+							 status = data[betId];
 						}
                         console.log(data);
                     },
@@ -558,7 +558,7 @@
 	  
       temp[urlId] =   [{"selectionId":selectionId,"side":side,"size":size,"price":price,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]
 	     	   
-	 if(false){
+	 if(true){
 		 
 	   //var temp =   {"1.145000241":[{"selectionId":1408,"side":"BACK","size":25,"price":1.52,"persistenceType":"LAPSE","handicap":"0","eachWayData":{}}]}
  
@@ -652,7 +652,7 @@
  function dobet(wave,optPeiLv,optAmount,optType,hedgingId){
 	 
 	     var betId = '';
-		 var status = '';
+		 var status = '0';
 	 
 	    var arr = doPlaceBet(optType,optAmount,optPeiLv);
 		if(null!=arr&&arr.length==2){

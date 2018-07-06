@@ -1,5 +1,7 @@
 package com.neo.discovery.util;
 
+import org.slf4j.Logger;
+
 import java.io.*;
 
 /**
@@ -7,6 +9,7 @@ import java.io.*;
  */
 public class FileUtils {
 
+    private static Logger logger = org.slf4j.LoggerFactory.getLogger(FileUtils.class);
     /**
      * 以字节为单位读取文件，常用于读二进制文件，如图片、声音、影像等文件。
      */
@@ -206,11 +209,8 @@ public class FileUtils {
             writer.flush();
             writer.close();
 
-
-
-
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("load file fail ,{}",fileName);
         }
     }
 

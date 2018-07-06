@@ -1,5 +1,6 @@
 package com.neo.discovery.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.neo.discovery.mapper.OptFlowMapper;
 import com.neo.discovery.mapper.WaveMapper;
 import com.neo.discovery.service.NoticeRule;
@@ -54,7 +55,7 @@ public class OptFlowServiceImpl implements OptFlowService {
 
     @Transactional
     public Integer insert(OptFlow optFlow) {
-
+        logger.info("insert optFlow param {}", JSON.toJSONString(optFlow));
         Date matchDate = parseMatchDate(optFlow.getMatchDateStr());
         optFlow.setMatchDate(matchDate);
 
@@ -63,20 +64,6 @@ public class OptFlowServiceImpl implements OptFlowService {
         TransactionStatus status = txManager.getTransaction(def); // 获得事务状态
         Integer result = null;
         try{
-
-            OptFlow param = new OptFlow();
-            param.setMatchId(optFlow.getMatchId());
-            param.setHedgingId(optFlow.getHedgingId());
-//            param.setStatus(OptStatus.PLACE.getOptStatus());
-            OptFlow place = optFlowMapper.selectOptFlow(param);
-            if(null!=place){
-                return 0;
-            }
-
-            if(StringUtils.isEmpty(optFlow.getHedgingId())){
-//                String hedgingId = ParseUtil.parseDate2Str(new Date(),"yyyyMMddHHmmss");
-//                optFlow.setHedgingId(hedgingId);
-            }
             optFlow.setCreateTime(new Date());
             result =  optFlowMapper.insert(optFlow);
             txManager.commit(status);
@@ -89,6 +76,9 @@ public class OptFlowServiceImpl implements OptFlowService {
 
     public OptFlow selectOptFlow(OptFlow optFlow) {
         return optFlowMapper.selectOptFlow(optFlow);
+    }
+    public OptFlow findNoHedgOptFlow(OptFlow optFlow) {
+        return optFlowMapper.findNoHedgOptFlow(optFlow);
     }
     public OptFlow isBettingRecord(OptFlow optFlow) {
         return optFlowMapper.isBettingRecord(optFlow);
@@ -137,12 +127,18 @@ public class OptFlowServiceImpl implements OptFlowService {
         bet1.setId(Long.parseLong(optFlow.getHedgingId()));
         OptFlow hedgingBet = optFlowMapper.selectOptFlow(bet1);//根据第二个bet的 hedgingId查询出第一个 bet的信息  该bet的 状态应该为 1
         if(null!=optFlowResult&&null!=optFlow.getHedgingId()&&hedgingBet.getStatus().equals(OptStatus.OK.getOptStatus())&&null!=optFlowResult&&optFlowResult.getStatus().equals(OptStatus.PLACE.getOptStatus())&&optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
+            DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+            def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);// 事物隔离级别，开启新事务
+            TransactionStatus status = txManager.getTransaction(def); // 获得事务状态
+
             OptFlow hedging = new OptFlow();
             hedging.setStatus(OptStatus.HEDGING.getOptStatus());
             hedging.setId(Long.parseLong(optFlowResult.getHedgingId()));
             hedging.setBetId(optFlow.getBetId());
             hedging.setMatchId(optFlow.getMatchId());
             result =   optFlowMapper.updateOneHedgingOptFlow(hedging);
+
+            txManager.commit(status);
         }
         return result;
     }
@@ -162,7 +158,11 @@ public class OptFlowServiceImpl implements OptFlowService {
             param.setMatchId(optFlow.getMatchId());
             OptFlow optFlowResult = optFlowMapper.selectOptFlow(param);
             if(null!=optFlowResult&&optFlow.getStatus().equals(OptStatus.OK.getOptStatus())){
+                DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+                def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);// 事物隔离级别，开启新事务
+                TransactionStatus status = txManager.getTransaction(def); // 获得事务状态
                 result =   optFlowMapper.updateOptFlowByBetId(optFlow);
+                txManager.commit(status);
             }
         }
 

@@ -114,14 +114,19 @@ public class WaveController {
         return  null;
     }
 
-    @RequestMapping(value="/insertGet" ,method = RequestMethod.GET)
+    @RequestMapping(value="/canDoBet" ,method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView insertGet(HttpServletRequest request,@RequestBody Wave wave){
+    public String canDoBet(HttpServletRequest request,@RequestBody OptFlow optFlow){
 //            int userId = Integer.parseInt(request.getParameter("id"));
 
 //        Wave temp = buildParam(request);
-        waveService.insert(wave);
-        return  null;
+        OptFlow result =  optFlowService.findNoHedgOptFlow(optFlow);
+        String canDoBet = "false";
+        if(null==result){
+            canDoBet  = "true";
+        }
+
+            return  "{\"canDoBet\":"+canDoBet+"}";
     }
 
 
@@ -250,7 +255,8 @@ public class WaveController {
                     }
                 }
             }else{
-                shouldDoOpt.setOptType(OptType.CONFIRM_STATUS.getOptType());
+
+
             }
 
 
@@ -260,4 +266,5 @@ public class WaveController {
 
         return JSON.toJSONString(shouldDoOpt);
     }
+
 }

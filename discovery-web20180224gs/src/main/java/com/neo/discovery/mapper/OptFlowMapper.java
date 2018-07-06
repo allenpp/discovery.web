@@ -17,6 +17,8 @@ public interface OptFlowMapper {
 
     OptFlow selectOptFlow(OptFlow optFlow);
 
+
+    OptFlow findNoHedgOptFlow(OptFlow optFlow);
     OptFlow isBettingRecord(OptFlow optFlow);
 
     List<OptFlow> selectOptFlowList(OptFlow optFlow);

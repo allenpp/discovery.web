@@ -102,6 +102,12 @@
         select  id   from operate_flow  order  by  id desc  limit 1
 
     </select>
+    <select id="findNoHedgOptFlow"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
+
+
+        select  *   from operate_flow where   status!=8  and matchid = #{matchId}
+
+    </select>
     <select id="isBettingRecord"  parameterType = "com.neo.discovery.vo.OptFlow" resultType="com.neo.discovery.vo.OptFlow">
 
 

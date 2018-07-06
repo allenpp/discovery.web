@@ -404,6 +404,7 @@
 					method: 'POST',
 					contentType:"application/json;",
                     data: json ,
+					async : false,
                     success: function (data) {
 						var obj = eval('('+data+')')
 						if(null!=obj&&null!=obj.optType){
@@ -440,7 +441,7 @@
                 });
   
   
-    
+    var can =  canDoBet(temp.matchId)
     
  
  }
@@ -448,8 +449,11 @@
  
  function doConfirmBetById(betId){
 	 
-	 if(null==betId) return "";
-	 
+	 if(null==betId){
+		 
+		 console.log("doConfirmBetById but betId is null"); 
+	     return "";
+	 }
 	 //  {"660932":"PLACED"}  表示 挂起
  
     //  {"660932":"CANCELLED"} 表示 成功
@@ -499,10 +503,27 @@
  
   function updateBet(betId,status,matchId,hedgingId){
 	 
+	 if(null==betId||null==matchId||""==betId||""==matchId){
+		 console.log("updateBet but betId is null");
+		 return ;
+	 }
+	 
 	 
 	 //  {"660932":"PLACED"}  表示 挂起
  
     //  {"660932":"CANCELLED"} 表示 成功
+	//  {"660932":"MATCHED"} 表示 成功
+	if(null!=status){
+		if(status=='PLACED'){
+			status = '0';
+		}else if(status=='CANCELLED'){
+			status ='3';
+		}else if(status=='MATCHED'){
+			status = '1';
+		}
+		
+		
+	}
 	 
 	 var temp = {"betId":betId,"status":status,"matchId":matchId,"hedgingId":hedgingId};
 	  var json = JSON.stringify(temp);
@@ -527,7 +548,7 @@
  
  
  
- function  doPlaceBet(optType,size,price){
+ function  doPlaceBet(optType,size,price,matchId){
  
      var returnArr = new Array();
 	 var selectionId = '';
@@ -549,10 +570,15 @@
 	 var crstoken =  getCookie('CSRF-TOKEN');
 	 var cookie = document.cookie;
  
+ //1.145175124?id=6005.502125632794
     var urlId = $("#baseForm").attr("action");
 	  if(null!=urlId&&urlId.length>0){
 		  var startIndex = urlId.lastIndexOf("/")+1;
 			urlId = urlId.slice(startIndex)+'';
+			var endIndex = urlId.lastIndexOf("?");
+			if(endIndex>0){
+				urlId = urlId.substr(0,endIndex);
+			}
 	  }
 	  var temp ={};
 	  
@@ -564,7 +590,12 @@
  
 	    var json = JSON.stringify(temp);
 		
-		
+		if(!canDoBet(matchId)) {
+			var currentTime  = new Date().getTime();  
+			returnArr.push(currentTime);
+			returnArr.push(1);
+			return returnArr;
+		}
  
         $.ajax({
                     url: "http://135.84.237.201/Exchange/customer/api/placeBets",
@@ -606,6 +637,10 @@
                      }
                 });
 				
+			if(null==betId||""==betId){
+				console.log("invoke  placeBets  fail ");
+				return  null;
+			}	
 				
 		   $.ajax({
                     url: "http://135.84.237.201/Exchange/customer/api/betsStatuses?betIds="+betId,
@@ -623,7 +658,7 @@
                     success: function (data) {
 					
 					    betStatus = data[betId];
-						returnArr.push(betStatus);
+						
 					
                         console.log(data);
                     },
@@ -641,6 +676,8 @@
                           //请求完成的处理
                      }
                 });
+				
+				returnArr.push(betStatus);
 	 
 	 }
  
@@ -651,20 +688,21 @@
  
  function dobet(wave,optPeiLv,optAmount,optType,hedgingId){
 	 
+	     var  matchId = wave.matchId
 	     var betId = '';
 		 var status = '0';
 	 
-	    var arr = doPlaceBet(optType,optAmount,optPeiLv);
+	    var arr = doPlaceBet(optType,optAmount,optPeiLv,matchId);
 		if(null!=arr&&arr.length==2){
 		   betId = arr[0];
 		   status = arr[1];
 		   if(status=='PLACED'){//待匹配
 		       status =0;
-		   }else if(status=='CANCEL'){
+		   }else if(status=='CANCELLED'){
 		       status =3;
-		   }else if(status=='OK'){
+		   }else if(status=='MATCHED'){
 		       status =1;
-		   }
+		   } 
 		}
 	 
 	    var currentTime  = new Date().getTime();  
@@ -674,7 +712,10 @@
 					 
 	    var json = JSON.stringify(optFlow);
  
-     
+     if(null==betId||""==betId) {
+		 console.log("invoke insert dobet but betId is null");
+		return ; 
+	 }
          
    $.ajax({
                     url: "http://127.0.0.1/wave/doBet",
@@ -704,6 +745,37 @@
 	 
  }
  
+ 
+ function canDoBet(matchId){
+	 var canDoBet = false;
+	 	var temp = {"matchId":matchId  };
+					 
+	    var json = JSON.stringify(temp);
+		
+		   $.ajax({
+                    url: "http://127.0.0.1/wave/canDoBet",
+                    type: "POST",
+                    datatype:"JSON",
+					method: 'POST',
+					contentType:"application/json;",
+                    data: json ,
+					async : false,
+                    success: function (data) {
+                       if(null!=data){
+						   var obj = eval('('+data+')')
+							if(obj.canDoBet==true)
+								canDoBet = true;
+							 
+						}
+                    },
+                    error: function () {
+                        console.log("提交失败！");
+                    }
+                });
+	 
+	 return canDoBet;
+	 
+ }
  
  
  

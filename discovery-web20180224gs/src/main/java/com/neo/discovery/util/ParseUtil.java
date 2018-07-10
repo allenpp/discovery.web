@@ -101,6 +101,48 @@ public class ParseUtil {
     }
 
 
+
+    public static Date parseMatchDate(String matchDate){
+       String matchDateStr =matchDate;
+//周六 17 三月<br>23:00
+        if(null!=matchDateStr){
+            try{
+                matchDateStr = matchDateStr.replaceAll("周一", "").replaceAll("周二", "").replaceAll("周三", "").replaceAll("周四", "").replaceAll("周五", "").replaceAll("周六", "").replaceAll("周日", "");
+                String [] strArr = matchDateStr.split("<br>");
+                String mounthTemp = strArr[0].replaceAll("一月", "01").replaceAll("二月", "02").replaceAll("三月", "03").replaceAll("四月", "04").replaceAll("五月", "05").replaceAll("六月", "06").replaceAll("七月", "07").replaceAll("八月", "08").replaceAll("九月", "09").replaceAll("十月", "10").replaceAll("十一月", "11").replaceAll("十二月", "12");
+
+                String mounth = mounthTemp.trim().split(" ")[1];
+                String day = mounthTemp.trim().split(" ")[0];
+                String hour = strArr[1];
+
+                String mathcDate = "2018"+"-"+mounth+"-"+day+" "+hour+":00";
+                Date date = ParseUtil.parseStr2Time(mathcDate);
+                return date;
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+
+
+    public static  boolean isBegining(Wave wave){
+        if(null!=wave){
+            Date now = new Date();
+            Date matchDate =ParseUtil.parseMatchDate( wave.getMatchDateStr());
+            if(null!=matchDate){
+                int res =   ParseUtil.compareDate(now,matchDate);
+                if(res>=0){
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
     /**
      * 解析当天比赛的数据
      * @param match
@@ -336,15 +378,81 @@ public class ParseUtil {
     }
 
 
+    /**
+     * 1 date1 >date2
+     * -1 date1<date2
+     * 0  date1=date2
+     * @param DATE1
+     * @param DATE2
+     * @return
+     */
+    public static int compareDateStr(String DATE1, String DATE2) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        try {
+            Date dt1 = df.parse(DATE1);
+            Date dt2 = df.parse(DATE2);
+            if (dt1.getTime() > dt2.getTime()) {
+                System.out.println("dt1 在dt2前");
+                return 1;
+            } else if (dt1.getTime() < dt2.getTime()) {
+                System.out.println("dt1在dt2后");
+                return -1;
+            } else {
+                return 0;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return 0;
+    }
+    /**
+     * 1 date1 >date2
+     * -1 date1<date2
+     * 0  date1=date2
+     * @param dt1
+     * @param dt2
+     * @return
+     */
+    public static int compareDate(Date dt1, Date dt2) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        try {
+            if (dt1.getTime() > dt2.getTime()) {
+                System.out.println("dt1 在dt2前");
+                return 1;
+            } else if (dt1.getTime() < dt2.getTime()) {
+                System.out.println("dt1在dt2后");
+                return -1;
+            } else {
+                return 0;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+
+        }
+        return 0;
+    }
+
 
     public static void main(String[] args ){
 
         String json ="";
 
-        parseJsonStr(json);
+//        parseJsonStr(json);
 
 //        String[] strs = "2.72|3.20|2.23".split("\\|");
 //        System.out.println(strs);
+
+
+        int  rs  = compareDateStr("2018-01-01 00:00", "2018-02-02 00:00");
+
+        try{
+
+            Date aa =  parseMatchDate(new String("周三 11 七月<br>02:00".getBytes("UTF-8"),"UTF-8"));
+
+        }catch (Exception e){
+
+        }
+        System.out.print(1 );
 
     }
 

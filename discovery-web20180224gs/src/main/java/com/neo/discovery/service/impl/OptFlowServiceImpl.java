@@ -8,6 +8,7 @@ import com.neo.discovery.service.OptFlowService;
 import com.neo.discovery.service.WaveService;
 import com.neo.discovery.util.OptStatus;
 import com.neo.discovery.util.ParseUtil;
+import com.neo.discovery.util.mail.MailUtil;
 import com.neo.discovery.vo.OptFlow;
 import com.neo.discovery.vo.RaceTeam;
 import com.neo.discovery.vo.Wave;
@@ -77,7 +78,7 @@ public class OptFlowServiceImpl implements OptFlowService {
     public OptFlow selectOptFlow(OptFlow optFlow) {
         return optFlowMapper.selectOptFlow(optFlow);
     }
-    public OptFlow findNoHedgOptFlow(OptFlow optFlow) {
+    public List<OptFlow> findNoHedgOptFlow(OptFlow optFlow) {
         return optFlowMapper.findNoHedgOptFlow(optFlow);
     }
     public OptFlow isBettingRecord(OptFlow optFlow) {
@@ -149,6 +150,11 @@ public class OptFlowServiceImpl implements OptFlowService {
      * @return
      */
     public Integer updateOptFlowByBetId(OptFlow optFlow) {
+
+        if(optFlow.getStatus().equals("")){
+            MailUtil.sendMail(optFlow.getHome()+"vs"+optFlow.getAway() + "  is PENDING  " + ParseUtil.parseDate2Str(optFlow.getMatchDate(), "yyyy-MM-dd HH:mm:ss"), " match is begin ");
+        }
+
         Integer result = 0;
         if(null!=optFlow&&StringUtils.isNotBlank(optFlow.getHedgingId())){//更新 hedging
             result = updateOneHedgingOptFlow(optFlow);

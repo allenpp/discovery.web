@@ -14,7 +14,7 @@ public interface OptFlowService {
 
     OptFlow selectOptFlow(OptFlow optFlow);
 
-    OptFlow findNoHedgOptFlow(OptFlow optFlow);
+    List<OptFlow> findNoHedgOptFlow(OptFlow optFlow);
 
     List<OptFlow> selectOptFlowList(OptFlow optFlow);
 

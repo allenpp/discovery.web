@@ -410,6 +410,9 @@
 						if(null!=obj&&null!=obj.optType){
 							betId = obj.betId;
 							hedgingId = obj.hedgingId;
+							if(!canDoBet(leagueMid[1])) {
+							   
+							}
 							if(obj.optType=='confirmStatus'){
 								var status = doConfirmBetById(betId);
 								if(null!=status){
@@ -441,7 +444,7 @@
                 });
   
   
-    var can =  canDoBet(temp.matchId)
+   // var can =  canDoBet(temp.matchId)
     
  
  }
@@ -520,6 +523,8 @@
 			status ='3';
 		}else if(status=='MATCHED'){
 			status = '1';
+		}else if(status=='PENDING'){
+			status = '0';
 		}
 		
 		
@@ -548,7 +553,7 @@
  
  
  
- function  doPlaceBet(optType,size,price,matchId){
+ function  doPlaceBet(optType,size,price,matchId,hedgingId){
  
      var returnArr = new Array();
 	 var selectionId = '';
@@ -590,11 +595,11 @@
  
 	    var json = JSON.stringify(temp);
 		
-		if(!canDoBet(matchId)) {
+		if(!canDoBet(matchId) &&hedgingId==null) {
 			var currentTime  = new Date().getTime();  
 			returnArr.push(currentTime);
 			returnArr.push(1);
-			return returnArr;
+			return null;
 		}
  
         $.ajax({
@@ -692,7 +697,7 @@
 	     var betId = '';
 		 var status = '0';
 	 
-	    var arr = doPlaceBet(optType,optAmount,optPeiLv,matchId);
+	    var arr = doPlaceBet(optType,optAmount,optPeiLv,matchId,hedgingId);
 		if(null!=arr&&arr.length==2){
 		   betId = arr[0];
 		   status = arr[1];
@@ -702,7 +707,9 @@
 		       status =3;
 		   }else if(status=='MATCHED'){
 		       status =1;
-		   } 
+		   }else if(status=='PENDING'){
+			  status = 0;
+		  }
 		}
 	 
 	    var currentTime  = new Date().getTime();  

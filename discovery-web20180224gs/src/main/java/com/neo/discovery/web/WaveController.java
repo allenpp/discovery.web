@@ -120,13 +120,13 @@ public class WaveController {
 //            int userId = Integer.parseInt(request.getParameter("id"));
 
 //        Wave temp = buildParam(request);
-        OptFlow result =  optFlowService.findNoHedgOptFlow(optFlow);
+        List<OptFlow> result =  optFlowService.findNoHedgOptFlow(optFlow);
         String canDoBet = "false";
-        if(null==result){
+        if(null==result||result.size()<1){
             canDoBet  = "true";
         }
 
-            return  "{\"canDoBet\":"+canDoBet+"}";
+        return  "{\"canDoBet\":"+canDoBet+"}";
     }
 
 
@@ -191,17 +191,17 @@ public class WaveController {
             if(null!=avgList&&avgList.size()>=3){
                 avgNow = avgList.get(0);
                 avgLast = avgList.get(avgList.size()-1);
-                if(avgNow.getBuy_s1_avg()<avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()<avgLast.getSale_s1_avg()){//œ÷‘⁄µƒ buy ∫Õ sale ∂º–°”⁄ “ª∏ˆ–° ±«∞  ‘Ú œ» buy
+                if(avgNow.getBuy_s1_avg()<avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()<avgLast.getSale_s1_avg()){//Áé∞Âú®ÁöÑ buy Âíå sale ÈÉΩÂ∞è‰∫é ‰∏Ä‰∏™Â∞èÊó∂Ââç  Âàô ÂÖà buy
                     shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
-                }else if(avgNow.getBuy_p1_avg()<avgLast.getBuy_p1_avg()&&avgNow.getSale_p1_avg()<avgLast.getSale_p1_avg()) {//œ÷‘⁄µƒ buy ∫Õ sale ∂º–°”⁄ “ª∏ˆ–° ±«∞  ‘Ú œ» buy
+                }else if(avgNow.getBuy_p1_avg()<avgLast.getBuy_p1_avg()&&avgNow.getSale_p1_avg()<avgLast.getSale_p1_avg()) {//Áé∞Âú®ÁöÑ buy Âíå sale ÈÉΩÂ∞è‰∫é ‰∏Ä‰∏™Â∞èÊó∂Ââç  Âàô ÂÖà buy
                     shouldDoOpt.setOptType(OptType.BUY_P.getOptType());
-                }else if(avgNow.getBuy_f1_avg()<avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()<avgLast.getSale_f1_avg()){//œ÷‘⁄µƒ buy ∫Õ sale ∂º–°”⁄ “ª∏ˆ–° ±«∞  ‘Ú œ» buy
+                }else if(avgNow.getBuy_f1_avg()<avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()<avgLast.getSale_f1_avg()){//Áé∞Âú®ÁöÑ buy Âíå sale ÈÉΩÂ∞è‰∫é ‰∏Ä‰∏™Â∞èÊó∂Ââç  Âàô ÂÖà buy
                     shouldDoOpt.setOptType(OptType.BUY_F.getOptType());
-                } else if(avgNow.getBuy_s1_avg()>avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()>avgLast.getSale_s1_avg()){//œ÷‘⁄µƒ buy ∫Õ sale ∂º–°”⁄ “ª∏ˆ–° ±«∞  ‘Ú œ» sale
+                } else if(avgNow.getBuy_s1_avg()>avgLast.getBuy_s1_avg()&&avgNow.getSale_s1_avg()>avgLast.getSale_s1_avg()){//Áé∞Âú®ÁöÑ buy Âíå sale ÈÉΩÂ∞è‰∫é ‰∏Ä‰∏™Â∞èÊó∂Ââç  Âàô ÂÖà sale
                     shouldDoOpt.setOptType(OptType.SALE_S.getOptType());
-                }else if(avgNow.getBuy_p1_avg()>avgLast.getBuy_p1_avg()&&avgNow.getSale_p1_avg()>avgLast.getSale_p1_avg()) {//œ÷‘⁄µƒ buy ∫Õ sale ∂º–°”⁄ “ª∏ˆ–° ±«∞  ‘Ú œ» sale
+                }else if(avgNow.getBuy_p1_avg()>avgLast.getBuy_p1_avg()&&avgNow.getSale_p1_avg()>avgLast.getSale_p1_avg()) {//Áé∞Âú®ÁöÑ buy Âíå sale ÈÉΩÂ∞è‰∫é ‰∏Ä‰∏™Â∞èÊó∂Ââç  Âàô ÂÖà sale
                     shouldDoOpt.setOptType(OptType.SALE_P.getOptType());
-                }else if(avgNow.getBuy_f1_avg()>avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()>avgLast.getSale_f1_avg()){//œ÷‘⁄µƒ buy ∫Õ sale ∂º–°”⁄ “ª∏ˆ–° ±«∞  ‘Ú œ» sale
+                }else if(avgNow.getBuy_f1_avg()>avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()>avgLast.getSale_f1_avg()){//Áé∞Âú®ÁöÑ buy Âíå sale ÈÉΩÂ∞è‰∫é ‰∏Ä‰∏™Â∞èÊó∂Ââç  Âàô ÂÖà sale
                     shouldDoOpt.setOptType(OptType.SALE_F.getOptType());
                 }
             }
@@ -233,7 +233,7 @@ public class WaveController {
                         shouldDoOpt.setHedgingId(optFlow.getId() + "");
                     }
                 }else if(haveOptType.equals(OptType.SALE_S.getOptType())){
-                    if(wave.getBuy_s1()-0.1>haveOptPeiLv){//’‚¿Ô◊¢“‚ –ﬁ∏ƒªÿ»•***********************************************************
+                    if(wave.getBuy_s1()-0.1>haveOptPeiLv){//ËøôÈáåÊ≥®ÊÑè ‰øÆÊîπÂõûÂéª***********************************************************
                         logger.info("should buy {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());

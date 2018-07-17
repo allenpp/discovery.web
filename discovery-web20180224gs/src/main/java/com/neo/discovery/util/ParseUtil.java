@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -128,15 +129,13 @@ public class ParseUtil {
     }
 
 
-    public static  boolean isBegining(Wave wave){
+    public static  boolean isBegining(Wave wave,int beginX){
         if(null!=wave){
             Date now = new Date();
             Date matchDate =ParseUtil.parseMatchDate( wave.getMatchDateStr());
             if(null!=matchDate){
-                int res =   ParseUtil.compareDate(now,matchDate);
-                if(res>=0){
-                    return true;
-                }
+               return ParseUtil.ifMatchRunningXMinute(now, matchDate, beginX);
+
             }
         }
         return false;
@@ -432,27 +431,54 @@ public class ParseUtil {
         return 0;
     }
 
+    /**
+     * 比赛是否已经开始X 分钟
+     * @param now  当前时间
+     * @param matchDate  比赛时间
+     * @param haveBeginX
+     * @return true:比赛已经开始x分钟   false:比赛还没开始x分钟; 默认返回 true
+     */
+    public static boolean ifMatchRunningXMinute(Date now, Date matchDate,int haveBeginX) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+        if(null!=now&&null!=matchDate){
+            Calendar rightNow = Calendar.getInstance();
+            rightNow.setTime(matchDate);
+//            rightNow.add(Calendar.YEAR,-1);//日期减1年
+//            rightNow.add(Calendar.MONTH,3);//日期加3个月
+            rightNow.add(Calendar.MINUTE,haveBeginX);//日期加x 分钟
+            Date runingTime=rightNow.getTime();
+            try {
+                if (now.getTime() >= runingTime.getTime()) {
+                    System.out.println("dt1 在dt2前");
+                    return true;
+                } else if (now.getTime() < runingTime.getTime()) {
+                    System.out.println("dt1在dt2后");
+                    return false;
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+
+            }
+        }
+        return true;
+    }
+
 
     public static void main(String[] args ){
 
-        String json ="";
-
-//        parseJsonStr(json);
-
-//        String[] strs = "2.72|3.20|2.23".split("\\|");
-//        System.out.println(strs);
 
 
-        int  rs  = compareDateStr("2018-01-01 00:00", "2018-02-02 00:00");
+        boolean  is  = ifMatchRunningXMinute(parseStr2Time("2018-01-01 00:00:03"), parseStr2Time("2018-01-01 00:00:02"),0);
 
+        System.out.print(is );
         try{
 
-            Date aa =  parseMatchDate(new String("周三 11 七月<br>02:00".getBytes("UTF-8"),"UTF-8"));
+//            Date aa =  parseMatchDate(new String("周三 11 七月<br>02:00".getBytes("UTF-8"), "UTF-8"));
 
         }catch (Exception e){
 
         }
-        System.out.print(1 );
 
     }
 

@@ -176,7 +176,7 @@ public class WaveController {
         status0.setStatus(OptStatus.OK.getOptStatus());
         optFlow = optFlowService.isBettingRecord(status0);
         if(null==optFlow){
-            if(ParseUtil.isBegining(wave)){
+            if(ParseUtil.isBegining(wave,5)){//开始一分钟后就 不再doBet
                 return JSON.toJSONString(shouldDoOpt);
             }
             TongJiDto max = null;
@@ -207,7 +207,11 @@ public class WaveController {
                     shouldDoOpt.setOptType(OptType.SALE_P.getOptType());
                 }else if(avgNow.getBuy_f1_avg()>avgLast.getBuy_f1_avg()&&avgNow.getSale_f1_avg()>avgLast.getSale_f1_avg()){//现在的 buy 和 sale 都小于 一个小时前  则 先 sale
                     shouldDoOpt.setOptType(OptType.SALE_F.getOptType());
+                }else if(ParseUtil.isBegining(wave, 0)) {//开始后 p 可能下降 所以先buy
+                    shouldDoOpt.setOptType(OptType.BUY_P.getOptType());
                 }
+            }else if(ParseUtil.isBegining(wave, 0)) {//开始后 p 可能下降 所以先buy
+                shouldDoOpt.setOptType(OptType.BUY_P.getOptType());
             }
         }else {
             shouldDoOpt.setBetId(optFlow.getBetId());
@@ -216,42 +220,42 @@ public class WaveController {
                 String haveOptType =  optFlow.getOptType();
                 float haveOptPeiLv = optFlow.getOptPeiLv();
                 if(haveOptType.equals(OptType.BUY_S.getOptType())){
-                    if(wave.getSale_s1()<haveOptPeiLv-0.1|| ParseUtil.isBegining(wave)){
+                    if(wave.getSale_s1()<haveOptPeiLv-0.1|| ParseUtil.isBegining(wave,2)){
                         logger.info("should sale {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.SALE_S.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
                         shouldDoOpt.setHedgingId(optFlow.getId()+"");
                     }
                 }else if(haveOptType.equals(OptType.BUY_P.getOptType())){
-                    if(wave.getSale_p1()<haveOptPeiLv-0.1|| ParseUtil.isBegining(wave)){
+                    if(wave.getSale_p1()<haveOptPeiLv-0.1|| ParseUtil.isBegining(wave,2)){
                         logger.info("should sale {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.SALE_P.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
                         shouldDoOpt.setHedgingId(optFlow.getId() + "");
                     }
                 }else if(haveOptType.equals(OptType.BUY_F.getOptType())){
-                    if(wave.getSale_f1()<haveOptPeiLv-0.1|| ParseUtil.isBegining(wave)){
+                    if(wave.getSale_f1()<haveOptPeiLv-0.1|| ParseUtil.isBegining(wave,2)){
                         logger.info("should sale {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.SALE_F.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
                         shouldDoOpt.setHedgingId(optFlow.getId() + "");
                     }
                 }else if(haveOptType.equals(OptType.SALE_S.getOptType())){
-                    if(wave.getBuy_s1()-0.1>haveOptPeiLv|| ParseUtil.isBegining(wave)){//这里注意 修改回去***********************************************************
+                    if(wave.getBuy_s1()-0.1>haveOptPeiLv|| ParseUtil.isBegining(wave,2)){//这里注意 修改回去***********************************************************
                         logger.info("should buy {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.BUY_S.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
                         shouldDoOpt.setHedgingId(optFlow.getId() + "");
                     }
                 }else if(haveOptType.equals(OptType.SALE_P.getOptType())){
-                    if(wave.getBuy_p1()-0.1>haveOptPeiLv|| ParseUtil.isBegining(wave)){
+                    if(wave.getBuy_p1()-0.1>haveOptPeiLv|| ParseUtil.isBegining(wave,2)){
                         logger.info("should buy {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.BUY_P.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
                         shouldDoOpt.setHedgingId(optFlow.getId() + "");
                     }
                 }else if(haveOptType.equals(OptType.SALE_F.getOptType())){
-                    if(wave.getBuy_f1() -0.11>haveOptPeiLv|| ParseUtil.isBegining(wave)){
+                    if(wave.getBuy_f1() -0.11>haveOptPeiLv|| ParseUtil.isBegining(wave,2)){
                         logger.info("should buy {},{}",wave.getSale_s1());
                         shouldDoOpt.setOptType(OptType.BUY_F.getOptType());
                         shouldDoOpt.setStatus(OptStatus.HEDGING.getOptStatus());
